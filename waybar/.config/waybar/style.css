@@ -5,6 +5,7 @@
   font-size: 16px;
   min-height: 0;
   font-weight: bold;
+  border-radius: 4px;
 }
 
 window#waybar {
@@ -20,7 +21,6 @@ window#waybar {
   padding-left: 8;
   padding-right: 8;
 }
-
 button {
   box-shadow: inset 0 -3px transparent;
   border: none;
@@ -30,7 +30,6 @@ button {
 button:hover {
   background: inherit;
   color: @mauve;
-  border-top: 2px solid @mauve;
 }
 
 #workspaces button {
@@ -38,15 +37,11 @@ button:hover {
 }
 
 #workspaces button.focused {
-  background-color: rgba(0, 0, 0, 0.3);
   color: @rosewater;
-  border-bottom: 2px solid @rosewater;
 }
 
 #workspaces button.active {
-  background-color: rgba(0, 0, 0, 0.3);
   color: @mauve;
-  border-bottom: 2px solid @mauve;
 }
 
 #workspaces button.urgent {
@@ -78,22 +73,18 @@ button:hover {
 
 #clock {
   color: @maroon;
-  border-bottom: 2px solid @maroon;
 }
 
 #clock.date {
   color: @mauve;
-  border-bottom: 2px solid @mauve;
 }
 
 #pulseaudio {
   color: @blue;
-  border-bottom: 2px solid @blue;
 }
 
 #network {
   color: @yellow;
-  border-bottom: 2px solid @yellow;
 }
 
 #idle_inhibitor {
@@ -107,12 +98,10 @@ button:hover {
 
 #battery {
   color: @green;
-  border-bottom: 2px solid @green;
 }
 
 #language {
   color: @green;
-  border-bottom: 2px solid @green;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
