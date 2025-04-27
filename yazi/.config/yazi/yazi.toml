@@ -1,0 +1,18 @@
+[manager]
+show_hidden = true
+sort_sensitive = false
+show_symlink = true
+
+[opener]
+edit = [
+	{ run = 'nvim "$@"', block = true, for = "unix" },
+]
+play = [
+	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+]
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open" },
+]
+
+[flavor]
+use = "catppuccin-mocha"
