@@ -5,13 +5,15 @@
 ---@type ChadrcConfig
 local M = {}
 
+M.ui = {
+  statusline = {
+    separator_style = "block",
+    theme = "default",
+  },
+}
+
 M.base46 = {
   theme = "catppuccin",
-
-  -- hl_override = {
-  -- 	Comment = { italic = true },
-  -- 	["@comment"] = { italic = true },
-  -- },
 }
 
 return M

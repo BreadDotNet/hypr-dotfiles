@@ -17,3 +17,7 @@ end, { desc = "LSP Code Action" })
 map("v", "<leader>ca", function()
   vim.lsp.buf.range_code_action()
 end, { desc = "LSP Range Code Action" })
+
+map("n", "<leader>sr", function()
+  vim.lsp.buf.references()
+end, { desc = "Show references" })
