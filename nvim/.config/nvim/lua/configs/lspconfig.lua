@@ -1,9 +1,7 @@
--- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
 
--- EXAMPLE
 local servers = { "html", "cssls", "jsonls" }
 local nvlsp = require "nvchad.configs.lspconfig"
 local util = require "lspconfig/util"
@@ -31,6 +29,20 @@ lspconfig.gopls.setup {
       analyses = {
         unusedparams = true,
       },
+    },
+  },
+}
+
+-- configuring single server: bashls
+lspconfig.bashls.setup {
+  on_attach = nvlsp.on_attach,
+  capabilities = nvlsp.capabilities,
+  cmd = { "bash-language-server", "start" },
+  filetypes = { "bash", "sh" },
+  root_dir = util.root_pattern ".git",
+  settings = {
+    bashIde = {
+      globPattern = "*@(.sh|.inc|.bash|.command)",
     },
   },
 }
