@@ -34,6 +34,7 @@ return {
         "css",
         "go",
         "dart",
+        "markdown_inline",
       },
     },
   },
