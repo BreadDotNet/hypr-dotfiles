@@ -29,6 +29,11 @@ require("lazy").setup({
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
+local api = require "nvim-tree.api"
+vim.keymap.set("n", "<F11>", function()
+  api.tree.open { current_window = true }
+end, { noremap = true })
+
 require "options"
 require "nvchad.autocmds"
 
