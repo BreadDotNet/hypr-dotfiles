@@ -1,48 +1,43 @@
 require("nvchad.configs.lspconfig").defaults()
-
-local lspconfig = require "lspconfig"
-
-local servers = { "html", "cssls", "jsonls" }
 local nvlsp = require "nvchad.configs.lspconfig"
-local util = require "lspconfig/util"
 
--- lsps with default config
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = nvlsp.on_attach,
-    on_init = nvlsp.on_init,
-    capabilities = nvlsp.capabilities,
-  }
+-- Базовая конфигурация для всех серверов
+local base_config = {
+  on_attach = nvlsp.on_attach,
+  on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+}
+
+-- HTML, CSS, JSON серверы с дефолтной конфигурацией
+for _, lsp in ipairs { "html", "cssls", "jsonls" } do
+  vim.lsp.config[lsp] = base_config
+  vim.lsp.enable(lsp)
 end
 
--- configuring single server: gopls
-lspconfig.gopls.setup {
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
+-- Go
+vim.lsp.config.gopls = vim.tbl_extend("force", base_config, {
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },
-  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  root_markers = { "go.work", "go.mod", ".git" },
   settings = {
     gopls = {
       completeUnimported = true,
       usePlaceholders = true,
-      analyses = {
-        unusedparams = true,
-      },
+      analyses = { unusedparams = true },
     },
   },
-}
+})
+vim.lsp.enable "gopls"
 
--- configuring single server: bashls
-lspconfig.bashls.setup {
-  on_attach = nvlsp.on_attach,
-  capabilities = nvlsp.capabilities,
+-- Bash
+vim.lsp.config.bashls = vim.tbl_extend("force", base_config, {
   cmd = { "bash-language-server", "start" },
   filetypes = { "bash", "sh" },
-  root_dir = util.root_pattern ".git",
+  root_markers = { ".git" },
   settings = {
     bashIde = {
       globPattern = "*@(.sh|.inc|.bash|.command)",
     },
   },
-}
+})
+vim.lsp.enable "bashls"
