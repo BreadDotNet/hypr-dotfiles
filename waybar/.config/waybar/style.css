@@ -1,4 +1,4 @@
-@import "mocha.css";
+@import "e-ink.css";
 
 * {
   font-family: "MesloLGS Nerd Font Mono Bold";
@@ -10,8 +10,8 @@
 
 window#waybar {
   background: transparent;
-  background-color: @crust;
-  color: @overlay0;
+  background-color: @mono1;
+  color: @mono10;
   transition-property: background-color;
   transition-duration: 0.1s;
 }
@@ -30,7 +30,7 @@ button {
 
 button:hover {
   background: inherit;
-  color: @mauve;
+  color: @mono14;
 }
 
 #workspaces button {
@@ -38,11 +38,11 @@ button:hover {
 }
 
 #workspaces button.focused {
-  color: @rosewater;
+  color: @mono16;
 }
 
 #workspaces button.active {
-  color: @mauve;
+  color: @mono16;
 }
 
 #workspaces button.urgent {
@@ -73,19 +73,19 @@ button:hover {
 }
 
 #clock {
-  color: @maroon;
+  color: @mono14;
 }
 
 #clock.date {
-  color: @mauve;
+  color: @mono12;
 }
 
 #pulseaudio {
-  color: @blue;
+  color: @mono12;
 }
 
 #network {
-  color: @yellow;
+  color: @mono12;
 }
 
 #idle_inhibitor {
@@ -98,11 +98,19 @@ button:hover {
 }
 
 #battery {
-  color: @green;
+  color: @mono12;
+}
+
+#battery.warning {
+  color: @yellow;
+}
+
+#battery.critical {
+  color: @red;
 }
 
 #language {
-  color: @green;
+  color: @mono12;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
@@ -116,7 +124,7 @@ button:hover {
 }
 
 #custom-vpn {
-  color: @lavender;
+  color: @mono12;
   border-radius: 15px;
   padding-left: 6px;
   padding-right: 6px;
