@@ -1,0 +1,3 @@
+# AMO build artifacts
+firefox/extensions/*/web-ext-artifacts/
+firefox/extensions/*/.amo-upload-uuid

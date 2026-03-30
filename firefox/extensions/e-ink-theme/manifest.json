@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "E-Ink Theme",
+  "version": "1.0",
+  "description": "E-ink greyscale + everforest accent theme, synced with system dark/light mode",
+  "permissions": ["theme"],
+  "background": {
+    "scripts": ["themes.js", "background.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "e-ink-theme@breadnet"
+    }
+  }
+}
