@@ -25,6 +25,8 @@ echo "$MODE" > "$STATE_FILE"
 # Reload running apps (best-effort)
 hyprctl reload 2>/dev/null || true
 pkill -SIGUSR2 waybar 2>/dev/null || true
+pkill -SIGUSR1 nvim 2>/dev/null || true
+tmux source-file ~/.tmux.conf 2>/dev/null || true
 # Starship picks up toml changes on next prompt render
 
 echo "Switched to $MODE mode."

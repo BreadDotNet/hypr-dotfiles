@@ -1,17 +1,22 @@
+local function read_theme()
+  local f = io.open(vim.fn.expand '~/.cache/e-ink-theme', 'r')
+  if f then
+    local mode = f:read('*l')
+    f:close()
+    if mode == 'light' or mode == 'dark' then
+      return mode
+    end
+  end
+  return 'dark'
+end
+
 return {
   'e-ink-colorscheme/e-ink.nvim',
   priority = 1000,
   config = function()
     require('e-ink').setup()
     vim.cmd.colorscheme 'e-ink'
-
-    -- choose light mode or dark mode
-    -- vim.opt.background = "dark"
-    -- vim.opt.background = "light"
-    --
-    -- or do
-    -- :set background=dark
-    -- :set background=light
+    vim.o.background = read_theme()
   end,
 }
 
