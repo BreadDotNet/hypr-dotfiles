@@ -34,6 +34,8 @@ hyprctl reload 2>/dev/null || true
 pkill -SIGUSR2 waybar 2>/dev/null || true
 pkill -SIGUSR1 nvim 2>/dev/null || true
 tmux source-file ~/.tmux.conf 2>/dev/null || true
+kill -SIGUSR1 $(pgrep -x kitty) 2>/dev/null || true
+kill -SIGUSR2 $(pgrep -x zsh) 2>/dev/null || true
 # Starship picks up toml changes on next prompt render
 # Firefox extension picks up color-scheme change automatically
 

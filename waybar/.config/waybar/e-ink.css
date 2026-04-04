@@ -25,3 +25,32 @@
 @define-color aqua #83C092;
 @define-color purple #D699B6;
 @define-color orange #E69875;
+
+/* Semantic aliases */
+@define-color bg #333333;
+@define-color surface #474747;
+@define-color overlay #545454;
+@define-color faint #5E5E5E;
+@define-color dim #686868;
+@define-color muted #727272;
+@define-color subtle #7C7C7C;
+@define-color border #868686;
+@define-color secondary #909090;
+@define-color tertiary #9A9A9A;
+@define-color fg #A4A4A4;
+@define-color emphasis #AEAEAE;
+@define-color strong #B8B8B8;
+@define-color bright #C2C2C2;
+@define-color intense #CCCCCC;
+@define-color error #E67E80;
+@define-color warning #DBBC7F;
+@define-color ok #A7C080;
+@define-color info #83C092;
+@define-color hint #7FBBB3;
+@define-color search #E69875;
+@define-color vcs_add #A7C080;
+@define-color vcs_change #7FBBB3;
+@define-color vcs_remove #E67E80;
+@define-color diff_add #3C4841;
+@define-color diff_change #384B55;
+@define-color diff_remove #4C3743;

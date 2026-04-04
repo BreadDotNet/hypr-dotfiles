@@ -30,7 +30,13 @@ source <(fzf --zsh)
 # Use on start
 source /usr/share/nvm/nvm.sh
 source /usr/share/nvm/bash_completion
-source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+source ~/dotfiles/zshrc/.zsh-syntax-highlighting-theme.zsh
+
+# Reload syntax highlighting theme on SIGUSR2 (sent by theme/switch.sh)
+TRAPUSR2() {
+  source ~/dotfiles/zshrc/.zsh-syntax-highlighting-theme.zsh
+  zle && zle reset-prompt
+}
 
 # Variables
 # export FZF_DEFAULT_COMMAND="ag --hiden --ignore .git -l -g """

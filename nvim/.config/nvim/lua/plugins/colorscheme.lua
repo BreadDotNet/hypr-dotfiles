@@ -10,14 +10,11 @@ local function read_theme()
   return 'dark'
 end
 
-return {
-  'e-ink-colorscheme/e-ink.nvim',
-  priority = 1000,
-  config = function()
-    require('e-ink').setup()
-    vim.cmd.colorscheme 'e-ink'
-    vim.o.background = read_theme()
-  end,
-}
+-- e-ink is a local module in lua/e-ink/, not a lazy.nvim plugin.
+-- Load it directly at startup with highest priority.
+vim.o.background = read_theme()
+require('e-ink').load()
+
+return {}
 
 -- vim: ts=2 sts=2 sw=2 et
