@@ -17,7 +17,7 @@ vim.api.nvim_create_autocmd('Signal', {
   callback = function()
     local f = io.open(vim.fn.expand '~/.cache/e-ink-theme', 'r')
     if f then
-      local mode = f:read('*l')
+      local mode = f:read '*l'
       f:close()
       if mode == 'light' or mode == 'dark' then
         vim.o.background = mode
