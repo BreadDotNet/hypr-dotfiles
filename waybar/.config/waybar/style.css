@@ -1,52 +1,53 @@
 @import "e-ink.css";
 
 * {
-  font-family: "MesloLGS Nerd Font Mono Bold";
-  font-size: 16px;
-  min-height: 0;
-  font-weight: bold;
-  border-radius: 4px;
+	font-family: "MesloLGS Nerd Font Mono Bold";
+	font-size: 16px;
+	min-height: 0;
+	font-weight: bold;
+	border-radius: 4px;
 }
 
 window#waybar {
-  background: transparent;
-  background-color: @mono1;
-  color: @mono10;
-  transition-property: background-color;
-  transition-duration: 0.1s;
+	background: transparent;
+	background-color: @mono1;
+	color: @mono10;
+	transition-property: background-color;
+	transition-duration: 0.1s;
 }
 
 #window {
-  padding-left: 4px;
-  padding-right: 4px;
-  margin-top: -50px;
-  margin-bottom: -50px;
+	padding-left: 4px;
+	padding-right: 4px;
+	margin-top: -50px;
+	margin-bottom: -50px;
 }
+
 button {
-  box-shadow: inset 0 -3px transparent;
-  border: none;
-  border-radius: 0;
+	box-shadow: inset 0 -3px transparent;
+	border: none;
+	border-radius: 0;
 }
 
 button:hover {
-  background: inherit;
-  color: @mono14;
+	background: inherit;
+	color: @mono14;
 }
 
 #workspaces button {
-  padding: 4px;
+	padding: 4px;
 }
 
 #workspaces button.focused {
-  color: @mono16;
+	color: @mono16;
 }
 
 #workspaces button.active {
-  color: @mono16;
+	color: @mono16;
 }
 
 #workspaces button.urgent {
-  background-color: #eb4d4b;
+	background-color: #eb4d4b;
 }
 
 #pulseaudio,
@@ -64,68 +65,68 @@ button:hover {
 #language,
 #workspaces,
 #scratchpad {
-  margin-top: 2px;
-  margin-bottom: 2px;
-  margin-left: 4px;
-  margin-right: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	margin-left: 4px;
+	margin-right: 4px;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 
 #clock {
-  color: @mono14;
+	color: @strong;
 }
 
 #clock.date {
-  color: @mono12;
+	color: @strong;
 }
 
 #pulseaudio {
-  color: @mono12;
+	color: @strong;
 }
 
 #network {
-  color: @mono12;
+	color: @strong;
 }
 
 #idle_inhibitor {
-  margin-right: 12px;
-  color: #7cb342;
+	margin-right: 12px;
+	color: #7cb342;
 }
 
 #idle_inhibitor.activated {
-  color: @red;
+	color: @red;
 }
 
 #battery {
-  color: @mono12;
+	color: @mono12;
 }
 
 #battery.warning {
-  color: @yellow;
+	color: @yellow;
 }
 
 #battery.critical {
-  color: @red;
+	color: @red;
 }
 
 #language {
-  color: @mono12;
+	color: @strong;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-  margin-left: 0;
+.modules-left>widget:first-child>#workspaces {
+	margin-left: 0;
 }
 
 /* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-  margin-right: 0;
+.modules-right>widget:last-child>#workspaces {
+	margin-right: 0;
 }
 
 #custom-vpn {
-  color: @mono12;
-  border-radius: 15px;
-  padding-left: 6px;
-  padding-right: 6px;
+	color: @mono12;
+	border-radius: 15px;
+	padding-left: 6px;
+	padding-right: 6px;
 }

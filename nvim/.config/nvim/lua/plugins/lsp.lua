@@ -101,6 +101,7 @@ return {
 
       local servers = {
         clangd = {},
+        cssls = {},
         gopls = {
           analyses = {
             unusedparams = true,
