@@ -7,7 +7,20 @@ return {
     'saghen/blink.cmp',
   },
   config = function()
-    require('flutter-tools').setup {}
+    require('flutter-tools').setup {
+      lsp = {
+        capabilities = require('blink.cmp').get_lsp_capabilities(),
+        settings = {
+          analysisExcludedFolders = {
+            vim.fn.expand '$HOME/.pub-cache',
+            vim.fn.expand '$HOME/fvm',
+          },
+          completeFunctionCalls = true,
+          renameFilesWithClasses = 'prompt',
+          updateImportsOnRename = true,
+        },
+      },
+    }
   end,
 }
 

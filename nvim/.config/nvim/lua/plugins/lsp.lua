@@ -73,7 +73,7 @@ return {
         severity_sort = true,
         update_in_insert = true,
         float = { border = 'rounded', source = 'if_many' },
-        underline = { severity = vim.diagnostic.severity.ERROR },
+        underline = true,
         signs = vim.g.have_nerd_font and {
           text = {
             [vim.diagnostic.severity.ERROR] = '󰅚 ',
@@ -103,11 +103,15 @@ return {
         clangd = {},
         cssls = {},
         gopls = {
-          analyses = {
-            unusedparams = true,
+          settings = {
+            gopls = {
+              analyses = {
+                unusedparams = true,
+              },
+              staticcheck = true,
+              gofumpt = true,
+            },
           },
-          staticcheck = true,
-          gofumpt = true,
         },
         lua_ls = {
           settings = {
