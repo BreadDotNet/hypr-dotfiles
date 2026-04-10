@@ -16,7 +16,46 @@ return {
         args = { 'debug_adapter' },
       }
 
-      -- Default launch config
+      -- Go adapter (Delve)
+      dap.adapters.delve = {
+        type = 'server',
+        port = '${port}',
+        executable = {
+          command = 'dlv',
+          args = { 'dap', '-l', '127.0.0.1:${port}' },
+        },
+      }
+
+      -- Default launch configs
+      dap.configurations.go = {
+        {
+          type = 'delve',
+          request = 'launch',
+          name = 'Go: Launch file',
+          program = '${file}',
+        },
+        {
+          type = 'delve',
+          request = 'launch',
+          name = 'Go: Launch package',
+          program = '${workspaceFolder}',
+        },
+        {
+          type = 'delve',
+          request = 'launch',
+          name = 'Go: Launch test',
+          mode = 'test',
+          program = '${file}',
+        },
+        {
+          type = 'delve',
+          request = 'attach',
+          name = 'Go: Attach to process',
+          mode = 'local',
+          processId = require('dap.utils').pick_process,
+        },
+      }
+
       dap.configurations.dart = {
         {
           type = 'flutter',
