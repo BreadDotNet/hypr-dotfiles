@@ -1,15 +1,15 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[](mono3)\
+[](surface)\
 $os\
 $username\
-[](bg:mono6 fg:mono3)\
+[](bg:dim fg:surface)\
 $directory\
-[](fg:mono6 bg:mono9)\
+[](fg:dim bg:border)\
 $git_branch\
 $git_status\
-[](fg:mono9 bg:mono12)\
+[](fg:border bg:fg)\
 $c\
 $rust\
 $golang\
@@ -19,11 +19,11 @@ $java\
 $kotlin\
 $haskell\
 $python\
-[](fg:mono12 bg:mono14)\
+[](fg:fg bg:strong)\
 $docker_context\
-[](fg:mono14 bg:mono16)\
+[](fg:strong bg:intense)\
 $time\
-[ ](fg:mono16)\
+[ ](fg:intense)\
 $line_break$character"""
 
 palette = 'e_ink_dark'
@@ -56,6 +56,28 @@ blue = "#7FBBB3"
 aqua = "#83C092"
 purple = "#D699B6"
 orange = "#E69875"
+# Semantic aliases
+bg = "#333333"
+surface = "#474747"
+overlay = "#545454"
+faint = "#5E5E5E"
+dim = "#686868"
+muted = "#727272"
+subtle = "#7C7C7C"
+border = "#868686"
+secondary = "#909090"
+tertiary = "#9A9A9A"
+fg = "#A4A4A4"
+emphasis = "#AEAEAE"
+strong = "#B8B8B8"
+bright = "#C2C2C2"
+intense = "#CCCCCC"
+error = "#E67E80"
+warning = "#DBBC7F"
+ok = "#A7C080"
+info = "#83C092"
+hint = "#7FBBB3"
+search = "#E69875"
 
 [palettes.e_ink_light]
 # Mono greyscale (from e-ink.nvim light palette)
@@ -83,10 +105,32 @@ blue = "#3A94C5"
 aqua = "#35A77C"
 purple = "#DF69BA"
 orange = "#F57D26"
+# Semantic aliases
+bg = "#CCCCCC"
+surface = "#C2C2C2"
+overlay = "#AEAEAE"
+faint = "#A4A4A4"
+dim = "#9A9A9A"
+muted = "#909090"
+subtle = "#868686"
+border = "#7C7C7C"
+secondary = "#727272"
+tertiary = "#686868"
+fg = "#5E5E5E"
+emphasis = "#545454"
+strong = "#4A4A4A"
+bright = "#474747"
+intense = "#333333"
+error = "#F85552"
+warning = "#DFA000"
+ok = "#8DA101"
+info = "#35A77C"
+hint = "#3A94C5"
+search = "#F57D26"
 
 [os]
 disabled = false
-style = "bg:mono3 fg:mono16"
+style = "bg:surface fg:intense"
 
 [os.symbols]
 Windows = "󰍲"
@@ -111,12 +155,12 @@ RedHatEnterprise = "󱄛"
 
 [username]
 show_always = true
-style_user = "bg:mono3 fg:mono16"
-style_root = "bg:mono3 fg:red"
+style_user = "bg:surface fg:intense"
+style_root = "bg:surface fg:error"
 format = '[ $user ]($style)'
 
 [directory]
-style = "fg:mono1 bg:mono6"
+style = "fg:bg bg:dim"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
@@ -130,85 +174,85 @@ truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "bg:mono9"
-format = '[[ $symbol $branch ](fg:mono1 bg:mono9)]($style)'
+style = "bg:border"
+format = '[[ $symbol $branch ](fg:bg bg:border)]($style)'
 
 [git_status]
-style = "bg:mono9"
-format = '[[($all_status$ahead_behind )](fg:mono1 bg:mono9)]($style)'
-ahead = "[⇡${count}](fg:green bg:mono9)"
-behind = "[⇣${count}](fg:orange bg:mono9)"
-diverged = "[⇕⇡${ahead_count}⇣${behind_count}](fg:yellow bg:mono9)"
-modified = "[!${count}](fg:yellow bg:mono9)"
-staged = "[+${count}](fg:green bg:mono9)"
-deleted = "[-${count}](fg:red bg:mono9)"
-untracked = "[?${count}](fg:blue bg:mono9)"
-conflicted = "[=${count}](fg:red bg:mono9)"
+style = "bg:border"
+format = '[[($all_status$ahead_behind )](fg:bg bg:border)]($style)'
+ahead = "[⇡${count}](fg:ok bg:border)"
+behind = "[⇣${count}](fg:search bg:border)"
+diverged = "[⇕⇡${ahead_count}⇣${behind_count}](fg:warning bg:border)"
+modified = "[!${count}](fg:warning bg:border)"
+staged = "[+${count}](fg:ok bg:border)"
+deleted = "[-${count}](fg:error bg:border)"
+untracked = "[?${count}](fg:hint bg:border)"
+conflicted = "[=${count}](fg:error bg:border)"
 
 [nodejs]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [c]
 symbol = " "
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [rust]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [golang]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [php]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [java]
 symbol = " "
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [kotlin]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [haskell]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [python]
 symbol = ""
-style = "bg:mono12"
-format = '[[ $symbol( $version) ](fg:mono1 bg:mono12)]($style)'
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
 
 [docker_context]
 symbol = ""
-style = "bg:mono14"
-format = '[[ $symbol( $context) ](fg:mono1 bg:mono14)]($style)'
+style = "bg:strong"
+format = '[[ $symbol( $context) ](fg:bg bg:strong)]($style)'
 
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:mono16"
-format = '[[  $time ](fg:mono1 bg:mono16)]($style)'
+style = "bg:intense"
+format = '[[  $time ](fg:bg bg:intense)]($style)'
 
 [line_break]
 disabled = false
 
 [character]
 disabled = false
-success_symbol = '[~](bold fg:green)'
-error_symbol = '[~](bold fg:red)'
-vimcmd_symbol = '[~](bold fg:green)'
+success_symbol = '[~](bold fg:ok)'
+error_symbol = '[~](bold fg:error)'
+vimcmd_symbol = '[~](bold fg:ok)'
 vimcmd_replace_one_symbol = '[~](bold fg:purple)'
 vimcmd_replace_symbol = '[~](bold fg:purple)'
-vimcmd_visual_symbol = '[~](bold fg:blue)'
+vimcmd_visual_symbol = '[~](bold fg:hint)'

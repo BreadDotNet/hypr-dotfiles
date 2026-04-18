@@ -10,8 +10,8 @@
 
 window#waybar {
 	background: transparent;
-	background-color: @mono1;
-	color: @mono10;
+	background-color: @bg;
+	color: @secondary;
 	transition-property: background-color;
 	transition-duration: 0.1s;
 }
@@ -31,7 +31,7 @@ button {
 
 button:hover {
 	background: inherit;
-	color: @mono14;
+	color: @strong;
 }
 
 #workspaces button {
@@ -39,15 +39,15 @@ button:hover {
 }
 
 #workspaces button.focused {
-	color: @mono16;
+	color: @intense;
 }
 
 #workspaces button.active {
-	color: @mono16;
+	color: @intense;
 }
 
 #workspaces button.urgent {
-	background-color: #eb4d4b;
+	background-color: @error;
 }
 
 #pulseaudio,
@@ -91,7 +91,7 @@ button:hover {
 
 #idle_inhibitor {
 	margin-right: 12px;
-	color: #7cb342;
+	color: @ok;
 }
 
 #idle_inhibitor.activated {
@@ -99,7 +99,7 @@ button:hover {
 }
 
 #battery {
-	color: @mono12;
+	color: @fg;
 }
 
 #battery.warning {
@@ -125,7 +125,7 @@ button:hover {
 }
 
 #custom-vpn {
-	color: @mono12;
+	color: @fg;
 	border-radius: 15px;
 	padding-left: 6px;
 	padding-right: 6px;

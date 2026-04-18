@@ -66,64 +66,123 @@ LIGHT_BG_GREEN=f3f5d9
 LIGHT_BG_BLUE=ECF5ED
 
 # --- Semantic mono aliases (dark) ---
+# Contrast scale: MONO1 = least contrast from background → MONO16 = max contrast.
+# For dark mode MONO1 is the darkest shade (BG) and MONO16 the lightest (INTENSE).
+# Pick values by asking: "how much should this element stand out from the background?"
+# BG primary background (windows, panels)
 DARK_BG=$DARK_MONO1
+# SURFACE raised surface (cards, inactive tabs, popup bg)
 DARK_SURFACE=$DARK_MONO2
+# OVERLAY hovered/overlaid element, modal backdrop
 DARK_OVERLAY=$DARK_MONO4
+# FAINT faintest UI element, divider lines
 DARK_FAINT=$DARK_MONO5
+# DIM dim UI element (disabled glyphs, placeholder text)
 DARK_DIM=$DARK_MONO6
+# MUTED muted text (code comments, unfocused status bar segments)
 DARK_MUTED=$DARK_MONO7
+# SUBTLE subtle foreground (icons in idle/resting state)
 DARK_SUBTLE=$DARK_MONO8
+# BORDER default border / separator between regions
 DARK_BORDER=$DARK_MONO9
+# SECONDARY secondary text (timestamps, less-important labels)
 DARK_SECONDARY=$DARK_MONO10
+# TERTIARY tertiary text (metadata, line numbers)
 DARK_TERTIARY=$DARK_MONO11
+# FG primary body text (most prose and UI labels)
 DARK_FG=$DARK_MONO12
+# EMPHASIS emphasized text (active menu item, selected list entry)
 DARK_EMPHASIS=$DARK_MONO13
+# STRONG strong foreground (headings, prominent status icons)
 DARK_STRONG=$DARK_MONO14
+# BRIGHT bright/highlighted text (search match foreground, notifications)
 DARK_BRIGHT=$DARK_MONO15
+# INTENSE max-contrast: cursor, active tab indicator, strongest focus ring
 DARK_INTENSE=$DARK_MONO16
 
 # --- Semantic mono aliases (light) ---
+# Same contrast-scale model as dark above; MONO1 is now the lightest shade (BG)
+# and MONO16 is the darkest (INTENSE).  The alias names and semantics are identical.
+# BG primary background (windows, panels)
 LIGHT_BG=$LIGHT_MONO1
+# SURFACE raised surface (cards, inactive tabs, popup bg)
 LIGHT_SURFACE=$LIGHT_MONO2
+# OVERLAY hovered/overlaid element, modal backdrop
 LIGHT_OVERLAY=$LIGHT_MONO4
+# FAINT faintest UI element, divider lines
 LIGHT_FAINT=$LIGHT_MONO5
+# DIM dim UI element (disabled glyphs, placeholder text)
 LIGHT_DIM=$LIGHT_MONO6
+# MUTED muted text (code comments, unfocused status bar segments)
 LIGHT_MUTED=$LIGHT_MONO7
+# SUBTLE subtle foreground (icons in idle/resting state)
 LIGHT_SUBTLE=$LIGHT_MONO8
+# BORDER default border / separator between regions
 LIGHT_BORDER=$LIGHT_MONO9
+# SECONDARY secondary text (timestamps, less-important labels)
 LIGHT_SECONDARY=$LIGHT_MONO10
+# TERTIARY tertiary text (metadata, line numbers)
 LIGHT_TERTIARY=$LIGHT_MONO11
+# FG primary body text (most prose and UI labels)
 LIGHT_FG=$LIGHT_MONO12
+# EMPHASIS emphasized text (active menu item, selected list entry)
 LIGHT_EMPHASIS=$LIGHT_MONO13
+# STRONG strong foreground (headings, prominent status icons)
 LIGHT_STRONG=$LIGHT_MONO14
+# BRIGHT bright/highlighted text (search match foreground, notifications)
 LIGHT_BRIGHT=$LIGHT_MONO15
+# INTENSE max-contrast: cursor, active tab indicator, strongest focus ring
 LIGHT_INTENSE=$LIGHT_MONO16
 
 # --- Semantic accent aliases (dark) ---
+# Accent semantics are identical across variants; only the raw hex values differ.
+# ERROR failures, critical battery, disconnected network
 DARK_ERROR=$DARK_RED
+# WARNING warnings, low battery, degraded state
 DARK_WARNING=$DARK_YELLOW
+# OK success, charging, active/healthy state
 DARK_OK=$DARK_GREEN
+# INFO informational highlight (cyan-ish)
 DARK_INFO=$DARK_AQUA
+# HINT hints, URLs, hyperlinks (blue-ish)
 DARK_HINT=$DARK_BLUE
+# SEARCH search/find highlights (orange-ish)
 DARK_SEARCH=$DARK_ORANGE
+# VCS_ADD added lines / new file indicator in git status
 DARK_VCS_ADD=$DARK_GREEN
+# VCS_CHANGE modified lines / changed file indicator in git status
 DARK_VCS_CHANGE=$DARK_BLUE
+# VCS_REMOVE deleted lines / removed file indicator in git status
 DARK_VCS_REMOVE=$DARK_RED
 
 # --- Semantic accent aliases (light) ---
+# Same semantics as dark block above.
+# ERROR failures, critical battery, disconnected network
 LIGHT_ERROR=$LIGHT_RED
+# WARNING warnings, low battery, degraded state
 LIGHT_WARNING=$LIGHT_YELLOW
+# OK success, charging, active/healthy state
 LIGHT_OK=$LIGHT_GREEN
+# INFO informational highlight (cyan-ish)
 LIGHT_INFO=$LIGHT_AQUA
+# HINT hints, URLs, hyperlinks (blue-ish)
 LIGHT_HINT=$LIGHT_BLUE
+# SEARCH search/find highlights (orange-ish)
 LIGHT_SEARCH=$LIGHT_ORANGE
+# VCS_ADD added lines / new file indicator in git status
 LIGHT_VCS_ADD=$LIGHT_GREEN
+# VCS_CHANGE modified lines / changed file indicator in git status
 LIGHT_VCS_CHANGE=$LIGHT_BLUE
+# VCS_REMOVE deleted lines / removed file indicator in git status
 LIGHT_VCS_REMOVE=$LIGHT_RED
 
 # --- Semantic diff background aliases ---
+# Low-saturation tinted backgrounds for diff views; pair with VCS_* foregrounds.
+# DIFF_ADD background tint for added/inserted content
 DARK_DIFF_ADD=$DARK_BG_GREEN
+# DIFF_CHANGE background tint for modified content
 DARK_DIFF_CHANGE=$DARK_BG_BLUE
+# DIFF_REMOVE background tint for deleted/removed content
 DARK_DIFF_REMOVE=$DARK_BG_RED
 LIGHT_DIFF_ADD=$LIGHT_BG_GREEN
 LIGHT_DIFF_CHANGE=$LIGHT_BG_BLUE

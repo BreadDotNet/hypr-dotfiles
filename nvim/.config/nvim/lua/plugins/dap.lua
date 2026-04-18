@@ -16,6 +16,9 @@ return {
         args = { 'debug_adapter' },
       }
 
+      -- Alias: configs with type = 'dart' also use the flutter adapter
+      dap.adapters.dart = dap.adapters.flutter
+
       -- Go adapter (Delve)
       dap.adapters.delve = {
         type = 'server',
