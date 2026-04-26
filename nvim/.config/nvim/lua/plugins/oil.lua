@@ -1,6 +1,17 @@
 return {
   'stevearc/oil.nvim',
-  dependencies = { { 'nvim-mini/mini.icons', opts = {} } },
+  dependencies = {
+    { 'nvim-mini/mini.icons', opts = {} },
+    {
+      'malewicz1337/oil-git.nvim',
+      dependencies = { 'stevearc/oil.nvim' },
+      opts = {
+        show_file_highlights = true,
+        show_directory_highlights = true,
+        show_ignored_files = true,
+      },
+    },
+  },
   lazy = false,
   config = function()
     require('oil').setup {

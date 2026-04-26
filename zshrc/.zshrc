@@ -55,4 +55,5 @@ export PATH="$HOME/bin:$PATH"
 export GOPATH="$HOME/go"
 export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 export GIT_EDITOR="nvim"
+export CHROME_EXECUTABLE=/usr/bin/google-chrome-stable
 
