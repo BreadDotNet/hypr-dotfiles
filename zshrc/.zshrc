@@ -57,3 +57,15 @@ export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 export GIT_EDITOR="nvim"
 export CHROME_EXECUTABLE=/usr/bin/google-chrome-stable
 
+
+# bun completions
+[ -s "/home/breadnet/.bun/_bun" ] && source "/home/breadnet/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# opencode
+export PATH=/home/breadnet/.opencode/bin:$PATH
+export OMO_SEND_ANONYMOUS_TELEMETRY=0
+export OMO_DISABLE_POSTHOG=1
