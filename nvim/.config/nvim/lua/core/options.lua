@@ -33,4 +33,11 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 
+-- Enable autoread and set up checking triggers
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter' }, {
+  command = "if mode() != 'c' | checktime | endif",
+  pattern = '*',
+})
+
 -- vim: ts=2 sts=2 sw=2 et
