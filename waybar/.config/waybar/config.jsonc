@@ -16,25 +16,25 @@
 		"clock"
 	],
 	"clock": {
-		"format": "<span foreground='#B8B8B8'>   </span>{:%a %d %H:%M}",
+		"format": "<span foreground='#A8A8A8'>   </span>{:%a %d %H:%M}",
 		"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
 		"on-click": "notion-calendar-electron"
 	},
 	"hyprland/language": {
-		"format": "<span size='13000' foreground='#A4A4A4'>{} </span>"
+		"format": "<span size='13000' foreground='#949494'>{} </span>"
 	},
 	"battery": {
 		"states": {
 			"warning": 30,
 			"critical": 15
 		},
-		"format": "<span size='13000' foreground='#A4A4A4'>{icon} </span> {capacity}%",
-		"format-warning": "<span size='13000' foreground='#DBBC7F'>{icon} </span> {capacity}%",
-		"format-critical": "<span size='13000' foreground='#E67E80'>{icon} </span> {capacity}%",
-		"format-charging": "<span size='13000' foreground='#A7C080'> </span>{capacity}%",
-		"format-plugged": "<span size='13000' foreground='#A7C080'> </span>{capacity}%",
-		"format-alt": "<span size='13000' foreground='#A4A4A4'>{icon} </span> {time}",
-		"format-full": "<span size='13000' foreground='#A7C080'> </span>{capacity}%",
+		"format": "<span size='13000' foreground='#949494'>{icon} </span> {capacity}%",
+		"format-warning": "<span size='13000' foreground='#D7875F'>{icon} </span> {capacity}%",
+		"format-critical": "<span size='13000' foreground='#D75F5F'>{icon} </span> {capacity}%",
+		"format-charging": "<span size='13000' foreground='#87AF87'> </span>{capacity}%",
+		"format-plugged": "<span size='13000' foreground='#87AF87'> </span>{capacity}%",
+		"format-alt": "<span size='13000' foreground='#949494'>{icon} </span> {time}",
+		"format-full": "<span size='13000' foreground='#87AF87'> </span>{capacity}%",
 		"format-icons": [
 			"",
 			"",
@@ -45,10 +45,10 @@
 		"tooltip-format": "{time}"
 	},
 	"network": {
-		"format-wifi": "<span size='13000' foreground='#A4A4A4'>  </span>{essid}",
-		"format-ethernet": "<span size='13000' foreground='#A4A4A4'>  {ifname} </span>",
+		"format-wifi": "<span size='13000' foreground='#949494'>  </span>{essid}",
+		"format-ethernet": "<span size='13000' foreground='#949494'>  {ifname} </span>",
 		"format-linked": "{ifname} (No IP) ",
-		"format-disconnected": "<span size='13000' foreground='#E67E80'>  </span>Disconnected",
+		"format-disconnected": "<span size='13000' foreground='#D75F5F'>  </span>Disconnected",
 		"tooltip-format-wifi": "Signal Strenght: {signalStrength}%"
 	},
 	"pulseaudio": {
@@ -64,7 +64,7 @@
 		"on-click": "pavucontrol"
 	},
 	"hyprland/window": {
-		"format": "<span foreground='#B8B8B8'>{}</span>",
+		"format": "<span foreground='#A8A8A8'>{}</span>",
 		"separate-outputs": true
 	}
 }

@@ -2,140 +2,99 @@
 
 ## Overview
 
-A two-variant (dark/light) greyscale theme with everforest accents, built around a single
-source of truth (`palette.sh`). Running `generate.sh <dark|light>` writes config files for
-Hyprland, Waybar CSS, Waybar config, Starship, tmux, kitty, Firefox, and zsh-syntax-highlighting.
-`switch.sh` wraps the generator, persists the chosen variant, and reloads running apps.
-Neovim reads `palette.sh` independently via `nvim/.config/nvim/lua/e-ink/palette.lua`.
+A two-variant cactusbuddy-based theme with dark and tuned light palettes, built around
+one source of truth: `theme/palette.sh`.
 
-## Architecture
+Run `theme/generate.sh <dark|light>` to regenerate active desktop configs:
 
 ```
 palette.sh
-    └── generate.sh <dark|light>
-            ├── generate_hyprland()      → hyprland/.config/hypr/e-ink.conf
-            ├── generate_waybar()        → waybar/.config/waybar/e-ink.css
-            ├── generate_waybar_config() → waybar/.config/waybar/config.jsonc  (from .tpl)
-            ├── generate_starship()      → starship/.config/starship.toml  (palette= line only)
-            ├── generate_tmux()          → tmux/e-ink.tmux.conf
-            ├── generate_kitty()         → kitty/.config/kitty/e-ink-theme.conf
-            ├── generate_firefox()       → firefox/extensions/e-ink-theme/themes.js
-            └── generate_zsh()           → zshrc/.zsh-syntax-highlighting-theme.zsh
-
-palette.sh (parsed directly, no generate.sh involvement)
-    └── nvim/.config/nvim/lua/e-ink/palette.lua
+    -> generate.sh <dark|light>
+        -> hyprland/.config/hypr/e-ink.conf
+        -> waybar/.config/waybar/e-ink.css
+        -> waybar/.config/waybar/config.jsonc
+        -> starship/.config/starship.toml
+        -> tmux/e-ink.tmux.conf
+        -> kitty/.config/kitty/e-ink-theme.conf
+        -> firefox/extensions/e-ink-theme/themes.js
+        -> zshrc/.zsh-syntax-highlighting-theme.zsh
+        -> wofi/.config/wofi/e-ink.css
+        -> ghostty/.config/ghostty/e-ink-theme.conf
 ```
 
-`switch.sh` calls `generate.sh`, writes `~/.cache/e-ink-theme`, then signals running apps.
+Neovim reads `palette.sh` directly via `nvim/.config/nvim/lua/e-ink/palette.lua`.
+`theme/switch.sh` persists the mode in `~/.cache/e-ink-theme`, regenerates configs,
+and reloads running apps best-effort.
 
-## `palette.sh` contract
+## Palette Contract
 
-Variable naming: `{VARIANT}_{NAME}` where `VARIANT` is `DARK` or `LIGHT` (uppercase).
+Variable names follow `{VARIANT}_{NAME}`, where `VARIANT` is `DARK` or `LIGHT`.
+Hex values are stored without `#`.
 
-### Mono contrast scale
+Mono aliases keep the same contrast model in both variants:
 
-16 greyscale shades per variant, ordered from least contrast against the background
-(MONO1 = BG) to maximum contrast (MONO16 = INTENSE). Dark and light are mirror images:
-`DARK_MONO1` = darkest shade; `LIGHT_MONO1` = lightest shade.
+| Alias | Use |
+| --- | --- |
+| `BG` | primary background |
+| `SURFACE` | raised surfaces, popup backgrounds |
+| `OVERLAY` | hover/selection surfaces |
+| `FAINT`, `DIM`, `MUTED`, `SUBTLE` | low-emphasis UI/text |
+| `BORDER` | separators and pane borders |
+| `SECONDARY`, `TERTIARY` | secondary text and metadata |
+| `FG` | primary body text |
+| `EMPHASIS`, `STRONG`, `BRIGHT`, `INTENSE` | stronger foregrounds |
 
-Semantic alias → intent reference:
+Accent aliases keep behavior stable across apps:
 
-| Alias       | Contrast | Typical use                                        |
-|-------------|----------|----------------------------------------------------|
-| BG          | 0        | Primary background (windows, panels)               |
-| SURFACE     | 1        | Raised surface (cards, inactive tabs, popup bg)    |
-| OVERLAY     | 2        | Hovered/overlaid element, modal backdrop           |
-| FAINT       | 3        | Faintest UI element, divider lines                 |
-| DIM         | 4        | Disabled glyphs, placeholder text                  |
-| MUTED       | 5        | Code comments, unfocused status bar segments       |
-| SUBTLE      | 6        | Icons in idle/resting state                        |
-| BORDER      | 7        | Default border / separator                         |
-| SECONDARY   | 8        | Timestamps, less-important labels                  |
-| TERTIARY    | 9        | Metadata, line numbers                             |
-| FG          | 10       | Primary body text                                  |
-| EMPHASIS    | 11       | Active menu item, selected list entry              |
-| STRONG      | 12       | Headings, prominent status icons                   |
-| BRIGHT      | 13       | Search match foreground, notifications             |
-| INTENSE     | 15       | Cursor, active tab indicator, strongest focus ring |
+| Alias | Use |
+| --- | --- |
+| `ERROR` | failures, critical state |
+| `WARNING` | warnings and degraded state |
+| `OK` | success, active/healthy state |
+| `INFO` | informational highlight |
+| `HINT` | links and hint-like highlights |
+| `SEARCH` | search/find highlights |
+| `VCS_ADD`, `VCS_CHANGE`, `VCS_REMOVE` | git/diff foregrounds |
+| `DIFF_ADD`, `DIFF_CHANGE`, `DIFF_REMOVE` | diff background tints |
 
-### Accent semantics
+Raw cactusbuddy aliases are also exposed for targets that need them:
+`CACTUS`, `GRASS`, `FRUIT`, `BRICK`, `BROWN`, `CYAN`.
 
-| Alias       | Everforest | Typical use                                    |
-|-------------|------------|------------------------------------------------|
-| ERROR       | RED        | Failures, critical battery, disconnected net   |
-| WARNING     | YELLOW     | Warnings, low battery, degraded state          |
-| OK          | GREEN      | Success, charging, active/healthy state        |
-| INFO        | AQUA       | Informational highlight (cyan-ish)             |
-| HINT        | BLUE       | URLs, hyperlinks (blue-ish)                    |
-| SEARCH      | ORANGE     | Search/find highlights                         |
-| VCS_ADD     | GREEN      | Added file/line in git status (foreground)     |
-| VCS_CHANGE  | BLUE       | Modified file/line in git status (foreground)  |
-| VCS_REMOVE  | RED        | Deleted file/line in git status (foreground)   |
-| DIFF_ADD    | BG_GREEN   | Added content background tint (diff view)      |
-| DIFF_CHANGE | BG_BLUE    | Modified content background tint               |
-| DIFF_REMOVE | BG_RED     | Deleted content background tint                |
+## Generated Files
 
-## Adding a new target
+Do not edit generated files by hand:
 
-1. Add a `generate_X()` function in `generate.sh`. Use `color NAME` to resolve a semantic
-   value for the current mode (e.g. `color FG` → hex string without `#`).
-2. The output file must begin with a generated-file banner:
-   ```
-   # ... ($MODE mode) -- AUTO-GENERATED by theme/generate.sh
-   ```
-3. Call `generate_X` in the main block at the bottom of `generate.sh`.
-4. Add the output path to the auto-generated file list in this README and in `CLAUDE.md`.
-5. Update the final `echo` summary line to include the new target name.
+- `hyprland/.config/hypr/e-ink.conf`
+- `waybar/.config/waybar/e-ink.css`
+- `waybar/.config/waybar/config.jsonc`
+- `starship/.config/starship.toml` between `# BEGIN E-INK GENERATED PALETTES`
+  and `# END E-INK GENERATED PALETTES`
+- `tmux/e-ink.tmux.conf`
+- `kitty/.config/kitty/e-ink-theme.conf`
+- `firefox/extensions/e-ink-theme/themes.js`
+- `zshrc/.zsh-syntax-highlighting-theme.zsh`
+- `wofi/.config/wofi/e-ink.css`
+- `ghostty/.config/ghostty/e-ink-theme.conf`
 
-If the target cannot use GTK `@name` CSS aliases (e.g. Pango inline markup), generate it
-from a `.tpl` file using `@@PLACEHOLDER@@` substitution — see `generate_waybar_config()`.
+Manual theme consumers:
 
-## Adding a new palette variant
+- `wofi/.config/wofi/style.css` imports generated `e-ink.css`.
+- `ghostty/.config/ghostty/config` includes generated `e-ink-theme.conf`.
+- `hyprlock/.config/hypr/hyprlock.conf` sources generated Hyprland colors and uses
+  `$nameAlpha` variables for Pango markup.
+- `starship/.config/starship.toml` keeps prompt layout manually; only palette blocks
+  are generated.
+- Firefox reads `firefox/extensions/e-ink-theme/themes.js` only after the extension
+  is reloaded. Rebuild with `web-ext build --overwrite-dest` from
+  `firefox/extensions/e-ink-theme/`, then reload the temporary extension or install
+  the new archive from `web-ext-artifacts/`.
 
-1. Add `NEWVARIANT_MONO1..16`, `NEWVARIANT_RED..ORANGE`, `NEWVARIANT_BG_RED/GREEN/BLUE`
-   to `palette.sh`, ordered least-contrast → most-contrast.
-2. Add the semantic alias chains (`NEWVARIANT_BG=$NEWVARIANT_MONO1`, etc.) following the
-   existing dark/light blocks.
-3. Update `generate.sh` and `switch.sh`: both currently hardcode `dark|light` in the
-   `MODE` parameter and `MODE_UPPER` expansion — add the new variant name to both files.
-4. Add a `[palettes.e_ink_newvariant]` block to `starship.toml` with both mono entries
-   and the full semantic alias set.
-
-## Switching themes
+## Switching Themes
 
 ```
 theme/switch.sh [dark|light|toggle]
 ```
 
-State file: `~/.cache/e-ink-theme` (plain text, one word).
-
-Shell alias: `theme toggle` (defined in `zshrc/.zshrc`).
-
-Reload mechanism: `hyprctl reload`, `pkill -SIGUSR2 waybar`, `pkill -SIGUSR1 nvim`,
-`tmux source-file ~/.tmux.conf`, `kill -SIGUSR1 $(pgrep -x kitty)`.
-Starship picks up changes on next prompt render. Firefox responds to `gsettings`
-`color-scheme` change automatically.
-
-## Known constraints / gotchas
-
-- **Pango inline markup** in `config.jsonc` cannot reference GTK CSS `@name` aliases,
-  so that file is generated from `config.jsonc.tpl` via `generate_waybar_config()`.
-  Edit the `.tpl`; never edit `config.jsonc` directly.
-
-- **Neovim parallel path**: `nvim/.config/nvim/lua/e-ink/palette.lua` parses `palette.sh`
-  directly at startup. Do not replicate nvim color logic in `generate.sh`, and do not
-  edit that file as part of theme generation.
-
-- **`starship.toml` split ownership**: `generate_starship()` only rewrites the
-  `palette = 'e_ink_...'` line via `sed`. The palette blocks and all inline style
-  references are hand-maintained in the file. When changing palette values, update
-  both `palette.sh` and the `[palettes.e_ink_*]` blocks in `starship.toml`.
-
-- **Auto-generated files** — do not edit by hand:
-  - `hyprland/.config/hypr/e-ink.conf`
-  - `waybar/.config/waybar/e-ink.css`
-  - `waybar/.config/waybar/config.jsonc`
-  - `tmux/e-ink.tmux.conf`
-  - `kitty/.config/kitty/e-ink-theme.conf`
-  - `firefox/extensions/e-ink-theme/themes.js`
-  - `zshrc/.zsh-syntax-highlighting-theme.zsh`
+Reload mechanism: `hyprctl reload`, Waybar `SIGUSR2`, Neovim `SIGUSR1`, tmux
+`source-file`, Kitty `SIGUSR1`, and zsh `SIGUSR2`. Ghostty, Wofi, and Hyprlock pick
+up generated files on next launch.

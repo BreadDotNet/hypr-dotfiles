@@ -4,7 +4,6 @@ height=40%
 prompt=search
 normal_window=true
 location=center
-gtk-dark=true
 allow_images=true
 image_size=32
 insensitive=true

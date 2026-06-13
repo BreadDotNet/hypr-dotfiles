@@ -41,59 +41,71 @@ end
 local function hardcoded_fallback()
    -- dark variant
    local dark = {
-      BG        = "333333",
-      SURFACE   = "474747",
-      OVERLAY   = "545454",
-      FAINT     = "5E5E5E",
-      DIM       = "686868",
-      MUTED     = "727272",
-      SUBTLE    = "7C7C7C",
-      BORDER    = "868686",
-      SECONDARY = "909090",
-      TERTIARY  = "9A9A9A",
-      FG        = "A4A4A4",
-      EMPHASIS  = "AEAEAE",
-      STRONG    = "B8B8B8",
-      BRIGHT    = "C2C2C2",
-      INTENSE   = "CCCCCC",
-      RED       = "E67E80",
-      YELLOW    = "DBBC7F",
-      GREEN     = "A7C080",
-      BLUE      = "7FBBB3",
-      AQUA      = "83C092",
-      PURPLE    = "D699B6",
-      ORANGE    = "E69875",
-      BG_RED    = "4C3743",
-      BG_GREEN  = "3C4841",
-      BG_BLUE   = "384B55",
+      BG        = "121212",
+      SURFACE   = "1C1C1C",
+      OVERLAY   = "303030",
+      FAINT     = "3A3A3A",
+      DIM       = "444444",
+      MUTED     = "585858",
+      SUBTLE    = "626262",
+      BORDER    = "767676",
+      SECONDARY = "808080",
+      TERTIARY  = "8A8A8A",
+      FG        = "949494",
+      EMPHASIS  = "9E9E9E",
+      STRONG    = "A8A8A8",
+      BRIGHT    = "B2B2B2",
+      INTENSE   = "BCBCBC",
+      RED       = "D75F5F",
+      YELLOW    = "AF875F",
+      GREEN     = "87AF87",
+      BLUE      = "5F87AF",
+      AQUA      = "87AFD7",
+      PURPLE    = "8787AF",
+      ORANGE    = "D7875F",
+      CACTUS    = "5F875F",
+      GRASS     = "87AF87",
+      FRUIT     = "D787AF",
+      BRICK     = "875F5F",
+      BROWN     = "AF875F",
+      CYAN      = "87AFD7",
+      BG_RED    = "2A1F1F",
+      BG_GREEN  = "1F2A1F",
+      BG_BLUE   = "1F252A",
    }
    -- light variant
    local light = {
-      BG        = "CCCCCC",
-      SURFACE   = "C2C2C2",
-      OVERLAY   = "AEAEAE",
-      FAINT     = "A4A4A4",
-      DIM       = "9A9A9A",
-      MUTED     = "909090",
-      SUBTLE    = "868686",
-      BORDER    = "7C7C7C",
-      SECONDARY = "727272",
-      TERTIARY  = "686868",
-      FG        = "5E5E5E",
-      EMPHASIS  = "545454",
-      STRONG    = "4A4A4A",
-      BRIGHT    = "474747",
-      INTENSE   = "333333",
-      RED       = "F85552",
-      YELLOW    = "DFA000",
-      GREEN     = "8DA101",
-      BLUE      = "3A94C5",
-      AQUA      = "35A77C",
-      PURPLE    = "DF69BA",
-      ORANGE    = "F57D26",
-      BG_RED    = "FFE7DE",
-      BG_GREEN  = "f3f5d9",
-      BG_BLUE   = "ECF5ED",
+      BG        = "EEEEEE",
+      SURFACE   = "E4E4E4",
+      OVERLAY   = "D0D0D0",
+      FAINT     = "C6C6C6",
+      DIM       = "BCBCBC",
+      MUTED     = "A8A8A8",
+      SUBTLE    = "9E9E9E",
+      BORDER    = "949494",
+      SECONDARY = "808080",
+      TERTIARY  = "6C6C6C",
+      FG        = "585858",
+      EMPHASIS  = "4E4E4E",
+      STRONG    = "444444",
+      BRIGHT    = "303030",
+      INTENSE   = "1C1C1C",
+      RED       = "875F5F",
+      YELLOW    = "875F00",
+      GREEN     = "4E754E",
+      BLUE      = "3F6F8F",
+      AQUA      = "2F7373",
+      PURPLE    = "5F5F87",
+      ORANGE    = "875F00",
+      CACTUS    = "4E754E",
+      GRASS     = "4E754E",
+      FRUIT     = "875F87",
+      BRICK     = "875F5F",
+      BROWN     = "875F00",
+      CYAN      = "2F7373",
+      BG_RED    = "E8DEDE",
+      BG_GREEN  = "DEE8DE",
+      BG_BLUE   = "DEE5EA",
    }
    -- Build a flat vars table keyed as DARK_X / LIGHT_X
    local vars = {}
@@ -109,14 +121,14 @@ local function hardcoded_fallback()
    end
    for _, p in ipairs({ "DARK_", "LIGHT_" }) do
       alias(p, "ERROR",      "RED")
-      alias(p, "WARNING",    "YELLOW")
+      alias(p, "WARNING",    "ORANGE")
       alias(p, "OK",         "GREEN")
       alias(p, "INFO",       "AQUA")
       alias(p, "HINT",       "BLUE")
-      alias(p, "SEARCH",     "ORANGE")
-      alias(p, "VCS_ADD",    "GREEN")
-      alias(p, "VCS_CHANGE", "BLUE")
-      alias(p, "VCS_REMOVE", "RED")
+      alias(p, "SEARCH",     "FRUIT")
+      alias(p, "VCS_ADD",    "CACTUS")
+      alias(p, "VCS_CHANGE", "BROWN")
+      alias(p, "VCS_REMOVE", "BRICK")
       alias(p, "DIFF_ADD",    "BG_GREEN")
       alias(p, "DIFF_CHANGE", "BG_BLUE")
       alias(p, "DIFF_REMOVE", "BG_RED")
@@ -176,6 +188,12 @@ function M.get()
          aqua     = v("AQUA"),
          purple   = v("PURPLE"),
          orange   = v("ORANGE"),
+         cactus   = v("CACTUS"),
+         grass    = v("GRASS"),
+         fruit    = v("FRUIT"),
+         brick    = v("BRICK"),
+         brown    = v("BROWN"),
+         cyan     = v("CYAN"),
          bg_red   = v("BG_RED"),
          bg_green = v("BG_GREEN"),
          bg_blue  = v("BG_BLUE"),

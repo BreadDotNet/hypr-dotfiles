@@ -21,6 +21,7 @@ vim.api.nvim_create_autocmd('Signal', {
       f:close()
       if mode == 'light' or mode == 'dark' then
         vim.o.background = mode
+        require('e-ink').load()
       end
     end
   end,
