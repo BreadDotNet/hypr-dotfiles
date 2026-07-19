@@ -1,0 +1,22 @@
+# Generated from themes/terminal-pro.env. Do not edit.
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#666666'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#F2F2F2'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#F2F2F2'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#F2F2F2'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#F2F2F2'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#F2F2F2'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#0000B2'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#666666'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#666666'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#00A6B2'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#B200B2'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#B200B2'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#990000'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#0000B2,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#0000B2,underline'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#0000B2'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#999900'
+ZSH_HIGHLIGHT_STYLES[default]='fg=#F2F2F2'
+ZSH_HIGHLIGHT_STYLES[cursor]='fg=#E6E600'

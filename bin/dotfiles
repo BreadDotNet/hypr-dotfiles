@@ -1,0 +1,263 @@
+#!/bin/sh
+
+set -eu
+
+DOTFILES_BIN_DIR=$(CDPATH= cd -P "$(dirname "$0")" && pwd)
+DOTFILES_ROOT=$(CDPATH= cd -P "$DOTFILES_BIN_DIR/.." && pwd)
+export DOTFILES_ROOT
+
+# shellcheck source=../scripts/lib/core.sh
+. "$DOTFILES_ROOT/scripts/lib/core.sh"
+# shellcheck source=../scripts/lib/platform.sh
+. "$DOTFILES_ROOT/scripts/lib/platform.sh"
+# shellcheck source=../scripts/lib/manifests.sh
+. "$DOTFILES_ROOT/scripts/lib/manifests.sh"
+# shellcheck source=../scripts/lib/stow.sh
+. "$DOTFILES_ROOT/scripts/lib/stow.sh"
+# shellcheck source=../scripts/lib/packages.sh
+. "$DOTFILES_ROOT/scripts/lib/packages.sh"
+# shellcheck source=../scripts/lib/theme.sh
+. "$DOTFILES_ROOT/scripts/lib/theme.sh"
+# shellcheck source=../scripts/lib/theme-reload.sh
+. "$DOTFILES_ROOT/scripts/lib/theme-reload.sh"
+
+DOTFILES_TEMP_DIR=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-cli.XXXXXX") || {
+    printf '%s\n' "dotfiles: error: could not create a temporary directory" >&2
+    exit 1
+}
+export DOTFILES_TEMP_DIR
+
+dotfiles_usage() {
+    cat <<'EOF'
+Usage:
+  dotfiles doctor [--target DIR] [--host NAME]
+  dotfiles list [--host NAME] [--package NAME]
+  dotfiles install [--dry-run] [--package NAME] [--host NAME]
+                   [--target DIR] [--backup-conflicts]
+  dotfiles restow [--dry-run] [--package NAME] [--host NAME]
+                  [--target DIR] [--backup-conflicts]
+  dotfiles uninstall [--dry-run] [--package NAME] [--host NAME]
+                     [--target DIR]
+  dotfiles theme list [--target DIR]
+  dotfiles theme current [--target DIR]
+  dotfiles theme apply NAME [--dry-run] [--host NAME] [--target DIR]
+                             [--no-reload]
+  dotfiles theme toggle [--dry-run] [--host NAME] [--target DIR]
+                        [--no-reload]
+  dotfiles packages list
+  dotfiles packages install [--dry-run]
+
+By default package selection comes from manifests for the detected platform.
+Repeat --package to operate on an explicit set instead.
+EOF
+}
+
+dotfiles_parse_selection_options() {
+    DOTFILES_DRY_RUN=0
+    DOTFILES_BACKUP_CONFLICTS=0
+    DOTFILES_TARGET=${HOME:?HOME is not set}
+    DOTFILES_HOST=${DOTFILES_HOST:-}
+    DOTFILES_EXPLICIT_PACKAGES=
+
+    while [ "$#" -gt 0 ]; do
+        case $1 in
+            --dry-run)
+                DOTFILES_DRY_RUN=1
+                ;;
+            --backup-conflicts)
+                DOTFILES_BACKUP_CONFLICTS=1
+                ;;
+            --package)
+                [ "$#" -ge 2 ] || dotfiles_die "--package requires a name"
+                dotfiles_validate_name "$2" "package"
+                DOTFILES_EXPLICIT_PACKAGES="${DOTFILES_EXPLICIT_PACKAGES}${DOTFILES_EXPLICIT_PACKAGES:+
+}$2"
+                shift
+                ;;
+            --host)
+                [ "$#" -ge 2 ] || dotfiles_die "--host requires a name"
+                dotfiles_validate_name "$2" "host"
+                DOTFILES_HOST=$2
+                shift
+                ;;
+            --target)
+                [ "$#" -ge 2 ] || dotfiles_die "--target requires a directory"
+                DOTFILES_TARGET=$2
+                shift
+                ;;
+            --help|-h)
+                dotfiles_usage
+                exit 0
+                ;;
+            *) dotfiles_die "unknown option: $1" ;;
+        esac
+        shift
+    done
+
+    export DOTFILES_DRY_RUN DOTFILES_HOST
+}
+
+dotfiles_load_selection() {
+    dotfiles_detect_platform
+    DOTFILES_SELECTED_FILE=$(dotfiles_make_temp_file selected)
+    dotfiles_select_packages "$DOTFILES_SELECTED_FILE" "$DOTFILES_EXPLICIT_PACKAGES" "$DOTFILES_HOST"
+}
+
+dotfiles_command_doctor() {
+    dotfiles_parse_selection_options "$@"
+    [ "$DOTFILES_DRY_RUN" -eq 0 ] || dotfiles_die "doctor does not accept --dry-run"
+    [ "$DOTFILES_BACKUP_CONFLICTS" -eq 0 ] || dotfiles_die "doctor does not accept --backup-conflicts"
+    [ -z "$DOTFILES_EXPLICIT_PACKAGES" ] || dotfiles_die "doctor does not accept --package"
+    dotfiles_load_selection
+    dotfiles_doctor "$DOTFILES_SELECTED_FILE" "$DOTFILES_TARGET"
+}
+
+dotfiles_command_list() {
+    dotfiles_parse_selection_options "$@"
+    [ "$DOTFILES_DRY_RUN" -eq 0 ] || dotfiles_die "list does not accept --dry-run"
+    [ "$DOTFILES_BACKUP_CONFLICTS" -eq 0 ] || dotfiles_die "list does not accept --backup-conflicts"
+    [ "$DOTFILES_TARGET" = "${HOME:?HOME is not set}" ] || dotfiles_die "list does not accept --target"
+    dotfiles_load_selection
+    dotfiles_print_platform
+    printf 'Selected Stow packages:\n'
+    sed 's/^/  /' "$DOTFILES_SELECTED_FILE"
+}
+
+dotfiles_command_stow() {
+    dotfiles_stow_action=$1
+    shift
+    dotfiles_parse_selection_options "$@"
+    if [ "$dotfiles_stow_action" = uninstall ] && [ "$DOTFILES_BACKUP_CONFLICTS" -eq 1 ]; then
+        dotfiles_die "uninstall does not accept --backup-conflicts"
+    fi
+    dotfiles_load_selection
+    DOTFILES_RELOAD=0
+    export DOTFILES_RELOAD DOTFILES_TARGET
+    if [ "$dotfiles_stow_action" != uninstall ]; then
+        theme_runtime_preflight || dotfiles_die 'theme runtime preflight failed; no Stow changes were made'
+    fi
+    dotfiles_manage_stow "$dotfiles_stow_action" "$DOTFILES_SELECTED_FILE" "$DOTFILES_TARGET"
+    case $dotfiles_stow_action in
+        install|restow) theme_ensure_default ;;
+        uninstall)
+            if [ -z "$DOTFILES_EXPLICIT_PACKAGES" ]; then
+                theme_remove_runtime
+            fi
+            ;;
+    esac
+}
+
+dotfiles_command_theme() {
+    [ "$#" -ge 1 ] || dotfiles_die "theme requires list, current, apply, or toggle"
+    dotfiles_theme_action=$1
+    shift
+    DOTFILES_DRY_RUN=0
+    DOTFILES_RELOAD=1
+    DOTFILES_TARGET=${HOME:?HOME is not set}
+    DOTFILES_HOST=${DOTFILES_HOST:-}
+    dotfiles_theme_name=
+
+    case $dotfiles_theme_action in
+        list|current|toggle) ;;
+        apply)
+            [ "$#" -ge 1 ] || dotfiles_die "theme apply requires a theme name"
+            dotfiles_theme_name=$1
+            shift
+            ;;
+        *) dotfiles_die "unknown theme action: $dotfiles_theme_action" ;;
+    esac
+
+    while [ "$#" -gt 0 ]; do
+        case $1 in
+            --dry-run) DOTFILES_DRY_RUN=1 ;;
+            --no-reload) DOTFILES_RELOAD=0 ;;
+            --host)
+                [ "$#" -ge 2 ] || dotfiles_die "--host requires a name"
+                dotfiles_validate_name "$2" "host"
+                DOTFILES_HOST=$2
+                shift
+                ;;
+            --target)
+                [ "$#" -ge 2 ] || dotfiles_die "--target requires a directory"
+                DOTFILES_TARGET=$2
+                shift
+                ;;
+            *) dotfiles_die "unknown theme option: $1" ;;
+        esac
+        shift
+    done
+
+    case $dotfiles_theme_action in
+        list|current)
+            [ "$DOTFILES_DRY_RUN" -eq 0 ] || dotfiles_die "$dotfiles_theme_action does not accept --dry-run"
+            [ "$DOTFILES_RELOAD" -eq 1 ] || dotfiles_die "$dotfiles_theme_action does not accept --no-reload"
+            [ -z "$DOTFILES_HOST" ] || dotfiles_die "$dotfiles_theme_action does not accept --host"
+            ;;
+        apply|toggle)
+            if [ "$DOTFILES_RELOAD" -eq 1 ] && [ "$DOTFILES_DRY_RUN" -eq 0 ]; then
+                [ -d "$DOTFILES_TARGET" ] || dotfiles_die "live reload target does not exist: $DOTFILES_TARGET"
+                dotfiles_theme_target_real=$(CDPATH= cd -P "$DOTFILES_TARGET" && pwd)
+                dotfiles_theme_home_real=$(CDPATH= cd -P "${HOME:?HOME is not set}" && pwd)
+                [ "$dotfiles_theme_target_real" = "$dotfiles_theme_home_real" ] || \
+                    dotfiles_die 'live reload is allowed only for HOME; use --no-reload with an isolated --target'
+            fi
+            ;;
+    esac
+
+    export DOTFILES_DRY_RUN DOTFILES_RELOAD DOTFILES_TARGET DOTFILES_HOST
+    case $dotfiles_theme_action in
+        list) theme_list ;;
+        current) theme_current ;;
+        apply) theme_apply "$dotfiles_theme_name" ;;
+        toggle) theme_toggle ;;
+    esac
+}
+
+dotfiles_command_packages() {
+    [ "$#" -ge 1 ] || dotfiles_die "packages requires list or install"
+    dotfiles_packages_action=$1
+    shift
+    DOTFILES_DRY_RUN=0
+    while [ "$#" -gt 0 ]; do
+        case $1 in
+            --dry-run) DOTFILES_DRY_RUN=1 ;;
+            *) dotfiles_die "unknown packages option: $1" ;;
+        esac
+        shift
+    done
+    export DOTFILES_DRY_RUN
+    dotfiles_detect_platform
+    case $dotfiles_packages_action in
+        list) dotfiles_packages_list ;;
+        install) dotfiles_packages_install ;;
+        *) dotfiles_die "unknown packages action: $dotfiles_packages_action" ;;
+    esac
+}
+
+dotfiles_cleanup_trap() {
+    dotfiles_cleanup_temps
+}
+trap dotfiles_cleanup_trap EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+[ "$#" -ge 1 ] || {
+    dotfiles_usage >&2
+    exit 2
+}
+
+dotfiles_command=$1
+shift
+case $dotfiles_command in
+    doctor) dotfiles_command_doctor "$@" ;;
+    list) dotfiles_command_list "$@" ;;
+    install|restow|uninstall) dotfiles_command_stow "$dotfiles_command" "$@" ;;
+    theme) dotfiles_command_theme "$@" ;;
+    packages) dotfiles_command_packages "$@" ;;
+    --help|-h|help) dotfiles_usage ;;
+    *)
+        dotfiles_usage >&2
+        dotfiles_die "unknown command: $dotfiles_command"
+        ;;
+esac

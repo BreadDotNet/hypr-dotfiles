@@ -1,0 +1,2 @@
+# Add host-specific Stow package names here, for example: host-example
+# Host packages live beside all other packages under packages/.

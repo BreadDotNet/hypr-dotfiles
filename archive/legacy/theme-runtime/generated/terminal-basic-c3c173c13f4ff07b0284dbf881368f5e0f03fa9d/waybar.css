@@ -1,0 +1,14 @@
+/* Generated from themes/terminal-basic.env. Do not edit. */
+@define-color bg #FFFFFF;
+@define-color surface #BFBFBF;
+@define-color overlay #BFBFBF;
+@define-color fg #000000;
+@define-color secondary #666666;
+@define-color strong #000000;
+@define-color intense #000000;
+@define-color error #990000;
+@define-color red #990000;
+@define-color yellow #999900;
+@define-color ok #00A600;
+@define-color info #00A6B2;
+@define-color search #B200B2;

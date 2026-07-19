@@ -1,0 +1,8 @@
+# Packages shared by every supported platform.
+shell
+starship
+nvim
+tmux
+kitty
+yazi
+gitu

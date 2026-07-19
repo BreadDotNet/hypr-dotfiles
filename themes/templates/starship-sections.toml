@@ -1,0 +1,129 @@
+
+[os]
+disabled = false
+style = "bg:surface fg:intense"
+
+[os.symbols]
+Windows = "󰍲"
+Ubuntu = "󰕈"
+SUSE = ""
+Raspbian = "󰐿"
+Mint = "󰣭"
+Macos = ""
+Manjaro = ""
+Linux = "󰌽"
+Gentoo = "󰣨"
+Fedora = "󰣛"
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = "󰣇"
+Artix = "󰣇"
+CentOS = ""
+Debian = "󰣚"
+Redhat = "󱄛"
+RedHatEnterprise = "󱄛"
+
+[username]
+show_always = true
+style_user = "bg:surface fg:intense"
+style_root = "bg:surface fg:error"
+format = '[ $user ]($style)'
+
+[directory]
+style = "fg:bg bg:dim"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+symbol = ""
+style = "bg:border"
+format = '[[ $symbol $branch ](fg:bg bg:border)]($style)'
+
+[git_status]
+style = "bg:border"
+format = '[[($all_status$ahead_behind )](fg:bg bg:border)]($style)'
+ahead = "[⇡${count}](fg:ok bg:border)"
+behind = "[⇣${count}](fg:search bg:border)"
+diverged = "[⇕⇡${ahead_count}⇣${behind_count}](fg:warning bg:border)"
+modified = "[!${count}](fg:warning bg:border)"
+staged = "[+${count}](fg:ok bg:border)"
+deleted = "[-${count}](fg:error bg:border)"
+untracked = "[?${count}](fg:hint bg:border)"
+conflicted = "[=${count}](fg:error bg:border)"
+
+[nodejs]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[c]
+symbol = " "
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[php]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[java]
+symbol = " "
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[kotlin]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[python]
+symbol = ""
+style = "bg:fg"
+format = '[[ $symbol( $version) ](fg:bg bg:fg)]($style)'
+
+[docker_context]
+symbol = ""
+style = "bg:strong"
+format = '[[ $symbol( $context) ](fg:bg bg:strong)]($style)'
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:intense"
+format = '[[  $time ](fg:bg bg:intense)]($style)'
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[~](bold fg:ok)'
+error_symbol = '[~](bold fg:error)'
+vimcmd_symbol = '[~](bold fg:ok)'
+vimcmd_replace_one_symbol = '[~](bold fg:purple)'
+vimcmd_replace_symbol = '[~](bold fg:purple)'
+vimcmd_visual_symbol = '[~](bold fg:hint)'

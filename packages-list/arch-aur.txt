@@ -1,0 +1,3 @@
+# Review and install manually with an AUR workflow of your choice.
+# No helper is selected or run by bin/dotfiles.
+google-chrome

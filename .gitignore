@@ -1,3 +1,14 @@
-# AMO build artifacts
-firefox/extensions/*/web-ext-artifacts/
-firefox/extensions/*/.amo-upload-uuid
+# AMO build artifacts (regardless of migration location)
+**/web-ext-artifacts/
+**/.amo-upload-uuid
+
+# Local migration and machine-specific data
+/.migration-backups/
+/.claude/settings.local.json
+/themes/local.env
+/themes/.generated-local/
+/hosts/*/theme.local.env
+
+# OS/editor noise
+.DS_Store
+nvim.log

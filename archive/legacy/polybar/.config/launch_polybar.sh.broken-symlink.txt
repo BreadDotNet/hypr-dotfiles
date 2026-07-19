@@ -1,0 +1,4 @@
+Original path: polybar/.config/launch_polybar.sh
+Original symlink target: ../dotfiles/polybar/.config/launch_polybar.sh
+Status during audit: broken and redundant; the actual launcher is preserved at
+polybar/.config/polybar/launch_polybar.sh in this archived package.

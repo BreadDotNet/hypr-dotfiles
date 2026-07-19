@@ -1,0 +1,12 @@
+# Homebrew itself is intentionally not bootstrapped by this repository.
+brew "stow"
+brew "git"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "starship"
+brew "neovim"
+brew "tmux"
+brew "yazi"
+brew "fzf"
+brew "ripgrep"
+cask "kitty"

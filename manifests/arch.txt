@@ -1,0 +1,8 @@
+# Arch desktop and shell integration.
+shell-arch
+backgrounds
+hyprland
+hyprlock
+hyprpaper
+waybar
+wofi

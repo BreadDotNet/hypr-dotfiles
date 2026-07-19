@@ -1,0 +1,2 @@
+# Cross-distribution Linux shell fragment.
+shell-linux

@@ -1,0 +1,6 @@
+config-file = ../dotfiles/theme/ghostty.conf
+
+font-family = CaskaydiaCove Nerd Font
+font-size = 16
+background-opacity = 0.95
+gtk-titlebar = false

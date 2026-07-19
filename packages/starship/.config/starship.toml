@@ -1,0 +1,4 @@
+# The interactive shell sets STARSHIP_CONFIG to the generated theme config at
+# ~/.config/dotfiles/theme/starship.toml. This fallback intentionally contains
+# no duplicated palette values.
+add_newline = false

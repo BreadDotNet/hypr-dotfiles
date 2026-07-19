@@ -1,0 +1,28 @@
+# GNU Stow architecture and common CLI applications used by tracked configs.
+stow
+git
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+starship
+neovim
+tmux
+kitty
+yazi
+fzf
+ripgrep
+
+# Active Arch/Hyprland desktop configuration and commands referenced by it.
+hyprland
+hyprlock
+hyprpaper
+waybar
+wofi
+hyprshot
+brightnessctl
+wireplumber
+pavucontrol
+polkit-gnome
+thunar
+firefox
+telegram-desktop
