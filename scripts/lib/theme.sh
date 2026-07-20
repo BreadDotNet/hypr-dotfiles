@@ -6,7 +6,7 @@ theme_error() {
     printf 'dotfiles theme: %s\n' "$*" >&2
 }
 
-theme_color_names='ANSI_0 ANSI_1 ANSI_2 ANSI_3 ANSI_4 ANSI_5 ANSI_6 ANSI_7 ANSI_8 ANSI_9 ANSI_10 ANSI_11 ANSI_12 ANSI_13 ANSI_14 ANSI_15 BACKGROUND FOREGROUND CURSOR SELECTION COLOR_ERROR COLOR_SUCCESS COLOR_WARNING COLOR_INFO COLOR_ACCENT COLOR_MUTED COLOR_DIRECTORY COLOR_LINK COLOR_STRING COLOR_COMMENT COLOR_ADDED COLOR_MODIFIED COLOR_DELETED COLOR_PRIMARY COLOR_EMPHASIZED COLOR_SURFACE COLOR_OVERLAY'
+theme_color_names='ANSI_0 ANSI_1 ANSI_2 ANSI_3 ANSI_4 ANSI_5 ANSI_6 ANSI_7 ANSI_8 ANSI_9 ANSI_10 ANSI_11 ANSI_12 ANSI_13 ANSI_14 ANSI_15 BACKGROUND FOREGROUND CURSOR SELECTION COLOR_ERROR COLOR_SUCCESS COLOR_WARNING COLOR_INFO COLOR_ACCENT COLOR_MUTED COLOR_DIRECTORY COLOR_LINK COLOR_STRING COLOR_COMMENT COLOR_ADDED COLOR_MODIFIED COLOR_DELETED COLOR_PRIMARY COLOR_EMPHASIZED COLOR_SURFACE COLOR_OVERLAY COLOR_CURSOR_TEXT COLOR_ACTIVE_BG COLOR_ACTIVE_FG COLOR_ON_ACCENT'
 
 theme_validate_color_file() {
     theme_validate_file=$1
@@ -72,6 +72,13 @@ theme_validate_name_value() {
     esac
 }
 
+theme_canonical_name() {
+    case $1 in
+        terminal-pro) printf '%s\n' 'terminal-basic-dark' ;;
+        *) printf '%s\n' "$1" ;;
+    esac
+}
+
 theme_load_palette() {
     theme_load_name=$1
     theme_load_overrides=${2:-1}
@@ -129,7 +136,8 @@ theme_validate_palette() {
         COLOR_ERROR COLOR_SUCCESS COLOR_WARNING COLOR_INFO COLOR_ACCENT \
         COLOR_MUTED COLOR_DIRECTORY COLOR_LINK COLOR_STRING COLOR_COMMENT \
         COLOR_ADDED COLOR_MODIFIED COLOR_DELETED COLOR_PRIMARY COLOR_EMPHASIZED \
-        COLOR_SURFACE COLOR_OVERLAY
+        COLOR_SURFACE COLOR_OVERLAY COLOR_CURSOR_TEXT COLOR_ACTIVE_BG \
+        COLOR_ACTIVE_FG COLOR_ON_ACCENT
     do
         eval "theme_palette_value=\${$theme_palette_var-}"
         if ! theme_is_hex "$theme_palette_value"; then
@@ -152,15 +160,15 @@ background              $BACKGROUND
 selection_foreground    $FOREGROUND
 selection_background    $SELECTION
 cursor                  $CURSOR
-cursor_text_color       $BACKGROUND
+cursor_text_color       $COLOR_CURSOR_TEXT
 url_color               $COLOR_LINK
 active_border_color     $COLOR_ACCENT
 inactive_border_color   $COLOR_MUTED
 bell_border_color       $COLOR_WARNING
 wayland_titlebar_color system
 macos_titlebar_color system
-active_tab_foreground   $BACKGROUND
-active_tab_background   $COLOR_EMPHASIZED
+active_tab_foreground   $COLOR_ACTIVE_FG
+active_tab_background   $COLOR_ACTIVE_BG
 inactive_tab_foreground $COLOR_MUTED
 inactive_tab_background $COLOR_SURFACE
 tab_bar_background      $BACKGROUND
@@ -192,7 +200,7 @@ foreground = $FOREGROUND
 selection-foreground = $FOREGROUND
 selection-background = $SELECTION
 cursor-color = $CURSOR
-cursor-text = $BACKGROUND
+cursor-text = $COLOR_CURSOR_TEXT
 palette = 0=$ANSI_0
 palette = 1=$ANSI_1
 palette = 2=$ANSI_2
@@ -417,7 +425,7 @@ theme_emit_firefox_variant() (
     toolbar_top_separator: "transparent", toolbar_bottom_separator: "$COLOR_ACCENT",
     button_background_hover: "$SELECTION", button_background_active: "$COLOR_ACCENT",
     popup: "$COLOR_SURFACE", popup_text: "$COLOR_PRIMARY", popup_highlight: "$COLOR_ACCENT",
-    popup_highlight_text: "$BACKGROUND", popup_border: "$COLOR_ACCENT",
+    popup_highlight_text: "$COLOR_ON_ACCENT", popup_border: "$COLOR_ACCENT",
     sidebar: "$BACKGROUND", sidebar_text: "$COLOR_PRIMARY", sidebar_border: "$COLOR_ACCENT",
     sidebar_highlight: "$SELECTION", sidebar_highlight_text: "$FOREGROUND",
     ntp_background: "$BACKGROUND", ntp_text: "$COLOR_PRIMARY", ntp_card_background: "$COLOR_SURFACE"
@@ -429,10 +437,10 @@ theme_generate_firefox_bundle() {
     theme_firefox_out=$1
     mkdir -p "$theme_firefox_out"
     {
-        printf '%s\n' '// Generated from terminal-basic.env and terminal-pro.env. Do not edit.'
+        printf '%s\n' '// Generated from terminal-basic.env and terminal-basic-dark.env. Do not edit.'
         printf '%s\n' 'const THEMES = {'
         theme_emit_firefox_variant terminal-basic light ,
-        theme_emit_firefox_variant terminal-pro dark ''
+        theme_emit_firefox_variant terminal-basic-dark dark ''
         printf '%s\n' '};'
     } >"$theme_firefox_out/themes.js"
 
@@ -561,6 +569,9 @@ theme_list() {
         [ "$theme_list_name" != "$theme_list_current" ] || theme_list_marker='*'
         printf '%s %-20s %s\n' "$theme_list_marker" "$theme_list_name" "$theme_list_appearance"
     done
+    theme_list_marker=' '
+    [ "$theme_list_current" != terminal-pro ] || theme_list_marker='*'
+    printf '%s %-20s %s\n' "$theme_list_marker" terminal-pro 'alias -> terminal-basic-dark'
 }
 
 theme_runtime_is_managed() {
@@ -689,8 +700,9 @@ theme_replace_current() {
 
 theme_apply() (
     set -eu
-    theme_name=${1-}
-    theme_validate_name_value "$theme_name" || { theme_error 'invalid or missing theme name'; exit 2; }
+    theme_requested_name=${1-}
+    theme_validate_name_value "$theme_requested_name" || { theme_error 'invalid or missing theme name'; exit 2; }
+    theme_name=$(theme_canonical_name "$theme_requested_name")
     DOTFILES_ROOT=${DOTFILES_ROOT:?DOTFILES_ROOT is required}
     DOTFILES_TARGET=${DOTFILES_TARGET:-${HOME:?HOME is not set}}
     theme_load_palette "$theme_name" 1

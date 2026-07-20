@@ -1,0 +1,22 @@
+# Generated from themes/terminal-basic-dark.env. Do not edit.
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main cursor)
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#909090'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#EDEDED'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#EDEDED'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#FFFFFF'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#FFFFFF'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#FFFFFF'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#6A42F6'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#909090'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#909090'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#41C4D1'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#E44CE1'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#E44CE1'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#D6492E'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#6A42F6,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#6A42F6,underline'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#6A42F6'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#B8B72F'
+ZSH_HIGHLIGHT_STYLES[default]='fg=#FFFFFF'
+ZSH_HIGHLIGHT_STYLES[cursor]='fg=#9D9D9D'

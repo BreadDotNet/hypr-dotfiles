@@ -30,7 +30,7 @@ function theme() {
   case "$action" in
     toggle) "$DOTFILES_REPO_ROOT/bin/dotfiles" theme toggle "$@" ;;
     light) "$DOTFILES_REPO_ROOT/bin/dotfiles" theme apply terminal-basic "$@" ;;
-    dark) "$DOTFILES_REPO_ROOT/bin/dotfiles" theme apply terminal-pro "$@" ;;
+    dark) "$DOTFILES_REPO_ROOT/bin/dotfiles" theme apply terminal-basic-dark "$@" ;;
     current|list) "$DOTFILES_REPO_ROOT/bin/dotfiles" theme "$action" "$@" ;;
     *)
       print -u2 'usage: theme [toggle|light|dark|current|list]'

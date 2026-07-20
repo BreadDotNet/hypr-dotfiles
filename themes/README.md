@@ -1,11 +1,13 @@
 # Theme artifacts
 
-`palettes/terminal-macos.env` owns the shared 16 ANSI colors and semantic
-application colors. `terminal-basic.env` and `terminal-pro.env` are the light
-and dark variants: they add appearance metadata, background/foreground, cursor,
-selection and mode-aware surface colors. These are portable Terminal
-Basic/Pro-compatible palettes, not a guarantee of pixel-identical Terminal.app
-rendering.
+`palettes/terminal-macos.env` owns the light Basic ANSI/semantic colors;
+`palettes/terminal-basic-dark.env` owns the distinct dark Basic colors.
+`terminal-basic.env` and `terminal-basic-dark.env` add appearance metadata,
+background/foreground, cursor, selection and mode-aware surface colors. These
+are portable Terminal Basic-compatible palettes; the dark palette is an sRGB
+capture, while the existing light compatibility values remain unchanged. This
+is not a guarantee of pixel-identical Terminal.app rendering. Terminal.app uses
+dynamic system colors, so rendering can vary with macOS and the display profile.
 
 The files are trusted POSIX assignments, but the generator validates an explicit
 variable allowlist before sourcing them. Resolution order is:
@@ -30,9 +32,12 @@ exists. Install never reloads applications or changes system appearance.
 dotfiles theme list
 dotfiles theme current
 dotfiles theme toggle
-dotfiles theme apply terminal-pro
+dotfiles theme apply terminal-basic-dark
 dotfiles theme apply terminal-basic --no-reload
 ```
+
+`terminal-pro` is a compatibility alias for `terminal-basic-dark`; generation,
+metadata and `theme current` use the canonical name.
 
 Apply/toggle validates and stages the whole candidate before atomically replacing
 the runtime link. With live reload enabled it synchronizes system appearance and

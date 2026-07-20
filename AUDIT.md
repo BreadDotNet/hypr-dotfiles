@@ -187,14 +187,16 @@ dependencies.
   bootstrap, system settings и login shell не автоматизируются.
 - Конфликтующий пользовательский файл блокирует установку. `stow --adopt` не
   используется; backup возможен только явно и восстановимо.
-- `themes/palettes/terminal-macos.env` хранит общий ANSI/semantic base;
-  `terminal-basic.env` и `terminal-pro.env` задают светлый и тёмный варианты.
+- Светлый и тёмный Basic используют отдельные ANSI/semantic bases:
+  `themes/palettes/terminal-macos.env` и `terminal-basic-dark.env`;
+  variant-файлы `terminal-basic.env` и `terminal-basic-dark.env` задают surfaces.
   Полный generated tree сначала создаётся и проверяется во временном каталоге,
   затем атомарно переключается runtime-ссылка `~/.config/dotfiles/theme`.
 - Runtime theme state вынесен из Git/Stow: ежедневный toggle не меняет
   `git status`, а ordinary file/unmanaged symlink на его месте блокирует команду.
-- Basic/Pro описываются как переносимые Terminal-compatible палитры, не как
-  точный рендеринг Terminal.app.
+- Basic Light/Dark описываются как переносимые совместимые палитры, а dark — как
+  sRGB-снимок, не как точный рендеринг динамических цветов Terminal.app;
+  `terminal-pro` сохранён как alias.
 - Явный `theme apply/toggle` синхронизирует system appearance и поддерживаемые
   live-приложения; install/restow и `--no-reload` этого не делают.
 - Tmux plugins не vendor'ятся и не скачиваются автоматически.
@@ -214,6 +216,10 @@ dependencies.
 - Промежуточный Stow-пакет `theme-runtime`, отслеживаемый `themes/current` и его
   старый generated tree сохранены в `archive/legacy/theme-runtime/`; активный
   runtime symlink мигрирован на прямую ссылку в content-addressed generated tree.
+- Промежуточная Pro-inspired dark-палитра и её generated artifact сохранены в
+  `archive/legacy/theme-runtime/`; их заменила совместимая Basic Dark палитра.
+- Basic Dark подготовлена и проверена только через временные HOME; реальная
+  runtime-ссылка оставлена на `terminal-basic`, live reload не выполнялся.
 - Старые tmux plugin checkouts/gitdirs/bundles сохранены только локально в
   `.migration-backups/tmux-plugins/`; основной пакет не должен содержать gitlinks.
 - Старые live-ссылки сняты через GNU Stow и заменены ссылками из `packages/`.
@@ -242,12 +248,14 @@ dependencies.
 - Установить TPM/plugins только вручную, если они нужны.
 - При первом подключении или изменении Firefox extension вручную перезагрузить
   её; дальнейший light/dark выбор следует системному appearance.
+- Когда потребуется тёмный режим, явно выполнить `theme dark`; эта команда уже
+  синхронизирует system appearance и поддерживаемые live-интеграции.
 - Перед commit проверить полный diff и убедиться, что migration backups, local
   overrides и персональные artifacts ignored.
 
 ### Статус проверок миграции
 
-Проверки выполнены 19 июля 2026 года на Arch Linux. Симуляция Darwin проверяет
+Проверки выполнены 19–20 июля 2026 года на Arch Linux. Симуляция Darwin проверяет
 только логику выбора и shell-переносимость, но не заменяет реальную macOS.
 
 | Проверка | Статус |
@@ -260,12 +268,13 @@ dependencies.
 | Install → repeated install/restow → uninstall | успешно в temp HOME; повторный live install также успешен |
 | Conflict detection и recoverable backup | успешно в temp fixture и live для двух обычных файлов |
 | Archive не попадает в установку; выбранные targets уникальны | успешно для 15 Arch-пакетов |
-| Theme apply/toggle и byte-identical result | успешно для Basic/Pro; checksum-списки совпали, `git status` не меняется |
+| Theme apply/toggle и byte-identical result | успешно для Basic Light/Dark и `terminal-pro` alias; точные цвета проверены во всех generated integrations, checksum-списки совпали, `git status` не меняется |
 | Invalid theme не меняет предыдущий complete output | успешно: incomplete palette отклонена, runtime target не изменился |
 | Live theme adapters | успешно в изолированном fixture для Linux `gsettings`, macOS `osascript`, строгой ошибки и обнаружения неожиданного изменения monitor/input state Hyprland; реальные system settings не менялись |
 | Zsh/Neovim live integration | успешно: shell helper найден через Stow `.zshrc`, Neovim сменил dark/light по runtime path без сигналов |
 | Neovim headless offline без plugin download/update | успешно с отдельными HOME/XDG и `DOTFILES_OFFLINE=1` |
 | Isolated tmux config check | успешно в отдельном tmux server/socket под `/tmp` |
+| Basic Dark full config parse | успешно для Kitty и Hyprland в отдельных временных HOME; live reload не выполнялся |
 | Neovim/tmux bundles verify и recovery clone | успешно для всех четырёх bundles; восстановленные HEAD совпали |
 | Simulated macOS и unknown Linux platform fixtures | успешно: macOS выбрал common+macOS; unknown Linux common+linux и отказ от package manager |
 | Hyprland live config | после явного reload ошибок нет; runtime подтверждает `us,ru`, `grp:win_space_toggle`, DP-3 165 Hz в `0x0` и вертикальный DP-1 в `-1080x0` |

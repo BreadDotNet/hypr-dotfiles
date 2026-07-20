@@ -54,8 +54,9 @@ host/local data, not a common default.
   byte-identical files.
 - Integrate only applications already configured here. Preserve non-color user
   settings and do not duplicate literal HEX values in their main configs.
-- `terminal-basic`/`terminal-pro` are portable Terminal-compatible palettes, not
-  claims about pixel-identical Terminal.app rendering.
+- `terminal-basic`/`terminal-basic-dark` are portable Terminal Basic-compatible
+  palettes, not claims about pixel-identical Terminal.app rendering.
+  `terminal-pro` is only a backwards-compatible CLI alias for the dark variant.
 - Explicit `theme apply/toggle` synchronizes system appearance and live apps;
   `install`, `restow`, isolated tests and `--no-reload` must never do so.
 

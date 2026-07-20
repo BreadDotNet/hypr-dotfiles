@@ -46,9 +46,9 @@
 │   ├── platforms/        # платформенные адаптеры
 │   └── tests/            # изолированные проверки
 ├── themes/
-│   ├── palettes/terminal-macos.env
+│   ├── palettes/terminal-{macos,basic-dark}.env
 │   ├── terminal-basic.env
-│   ├── terminal-pro.env
+│   ├── terminal-basic-dark.env
 │   ├── default
 │   ├── templates/
 │   └── generated/
@@ -170,24 +170,32 @@ CLI не зависит от текущего рабочего каталога.
 
 ## Цветовая тема
 
-Доступна пара переносимых совместимых палитр, основанных на стандартном стиле
-macOS Terminal, но не обещающих идентичный рендеринг конкретной Terminal.app:
+Доступна пара переносимых совместимых палитр стандартного динамического профиля
+Basic из macOS Terminal. Светлый вариант сохраняет ранее зафиксированные
+Basic-compatible значения, а тёмный использует sRGB-снимок Basic Dark. Они не
+обещают идентичный рендеринг конкретной Terminal.app или профиля дисплея:
 
 - `terminal-basic` — светлая;
-- `terminal-pro` — тёмная.
+- `terminal-basic-dark` — тёмная: `#1E1E1E` background, белый текст,
+  серый cursor и синее selection.
 
-Общие 16 ANSI-цветов и семантические токены хранятся один раз в
-`themes/palettes/terminal-macos.env`; variant-файлы задают фон, текст, surface и
-режим `light`/`dark`.
+Каждый appearance имеет собственные 16 ANSI-цветов и semantic mappings в
+`themes/palettes/`: Basic Dark специально не переиспользует слишком тёмные
+акценты светлой палитры. Variant-файлы задают фон, текст, cursor, selection,
+surface и режим `light`/`dark`.
 
 ```sh
 ./bin/dotfiles theme list
 ./bin/dotfiles theme current
 ./bin/dotfiles theme toggle --dry-run
 ./bin/dotfiles theme toggle
-./bin/dotfiles theme apply terminal-pro
+./bin/dotfiles theme apply terminal-basic-dark
 ./bin/dotfiles theme apply terminal-basic --no-reload
 ```
+
+Старое имя `terminal-pro` остаётся совместимым alias для
+`terminal-basic-dark`, но `theme current` после применения показывает
+каноническое имя.
 
 Генератор сначала проверяет палитру, создаёт и валидирует полный набор временных
 файлов и лишь затем атомарно переключает runtime-ссылку
