@@ -261,15 +261,18 @@ theme_generate_tmux() {
 # Generated from themes/$theme_name.env. Do not edit.
 set -g pane-border-style fg=$COLOR_MUTED
 set -g pane-active-border-style fg=$COLOR_ACCENT
-set -g status-style bg=default,fg=$COLOR_PRIMARY
+set -g status-style "bg=$BACKGROUND,fg=$COLOR_PRIMARY"
 set -g status-left ""
 set -g status-right "#[fg=$COLOR_MUTED]#S"
 set -g window-status-format "#[fg=$COLOR_MUTED] #I #W "
 set -g window-status-current-format "#[fg=$COLOR_ACCENT,bold] #I #W "
 set -g window-status-separator ""
-set -g message-style bg=$BACKGROUND,fg=$COLOR_EMPHASIZED
-set -g message-command-style bg=$BACKGROUND,fg=$COLOR_EMPHASIZED
-set -g mode-style bg=$SELECTION,fg=$FOREGROUND
+set -g message-style \
+    "bg=$BACKGROUND,fg=$COLOR_EMPHASIZED,fill=$BACKGROUND,width=100%"
+set -g message-command-style \
+    "bg=$BACKGROUND,fg=$COLOR_EMPHASIZED,fill=$BACKGROUND,width=100%"
+set -g message-format \
+    "#[bg=$BACKGROUND,fg=$COLOR_EMPHASIZED,fill=$BACKGROUND,width=100%,align=left]#{message}"
 EOF
 }
 
