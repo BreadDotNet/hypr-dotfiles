@@ -273,7 +273,7 @@ dependencies.
 | Live theme adapters | успешно в изолированном fixture для Linux `gsettings`, macOS `osascript`, строгой ошибки и обнаружения неожиданного изменения monitor/input state Hyprland; реальные system settings не менялись |
 | Zsh/Neovim live integration | успешно: shell helper найден через Stow `.zshrc`, Neovim сменил dark/light по runtime path без сигналов |
 | Neovim headless offline без plugin download/update | успешно с отдельными HOME/XDG и `DOTFILES_OFFLINE=1` |
-| Isolated tmux config check | успешно в отдельном tmux server/socket под `/tmp` |
+| Isolated tmux config check | успешно в отдельном tmux server/socket; 20 августа 2026 года дополнительно пройден Linux regression с длинным macOS-подобным `TMPDIR` и явным коротким `tmux -S` socket; реальная macOS остаётся непроверенной |
 | Basic Dark full config parse | успешно для Kitty и Hyprland в отдельных временных HOME; live reload не выполнялся |
 | Neovim/tmux bundles verify и recovery clone | успешно для всех четырёх bundles; восстановленные HEAD совпали |
 | Simulated macOS и unknown Linux platform fixtures | успешно: macOS выбрал common+macOS; unknown Linux common+linux и отказ от package manager |

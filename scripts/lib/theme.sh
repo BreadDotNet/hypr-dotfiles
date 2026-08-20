@@ -499,9 +499,10 @@ theme_validate_output() {
             return 1
         }
         theme_tmux_error=$theme_tmux_tmp/error.log
-        if TMUX_TMPDIR="$theme_tmux_tmp" tmux -L "dotfiles-theme-$$" \
+        theme_tmux_socket=$theme_tmux_tmp/s
+        if tmux -S "$theme_tmux_socket" \
             -f "$theme_output/tmux.conf" new-session -d 2>"$theme_tmux_error"; then
-            TMUX_TMPDIR="$theme_tmux_tmp" tmux -L "dotfiles-theme-$$" kill-server 2>/dev/null || true
+            tmux -S "$theme_tmux_socket" kill-server 2>/dev/null || true
             rm -rf "$theme_tmux_tmp"
         elif grep -Eiq 'operation not permitted|permission denied|could not create|failed to connect|no server running' \
             "$theme_tmux_error"; then

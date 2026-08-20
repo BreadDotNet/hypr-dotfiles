@@ -3,6 +3,7 @@ return {
   event = 'VimEnter',
   dependencies = {
     'nvim-lua/plenary.nvim',
+    'nvim-telescope/telescope-symbols.nvim',
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make',
@@ -66,6 +67,14 @@ return {
     vim.keymap.set('n', '<leader>sn', function()
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = '[S]earch [N]eovim files' })
+
+    vim.keymap.set('i', '<C-e>', function()
+      require('telescope.builtin').symbols {
+        sources = { 'gitmoji' },
+      }
+    end, {
+      desc = 'Insert gitmoji',
+    })
   end,
 }
 

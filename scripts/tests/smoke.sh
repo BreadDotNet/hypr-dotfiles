@@ -7,18 +7,26 @@ SMOKE_ROOT=$(CDPATH= cd -P "$SMOKE_DIR/../.." && pwd)
 SMOKE_TMP=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-smoke.XXXXXX") || exit 1
 SMOKE_HOME="$SMOKE_TMP/home with spaces"
 SMOKE_CONFLICT_HOME="$SMOKE_TMP/conflict home"
+# Mimic macOS's long per-user TMPDIR while keeping the explicit -S socket short enough.
+SMOKE_LONG_TMP_BASE=$(mktemp -d "/tmp/dft.XXXXXX") || exit 1
+SMOKE_LONG_TMP="$SMOKE_LONG_TMP_BASE/12345678901234567890123456789012345678901234567890123456"
 
 smoke_cleanup() {
-    rm -rf "$SMOKE_TMP"
+    rm -rf "$SMOKE_TMP" "$SMOKE_LONG_TMP_BASE"
 }
 
 trap smoke_cleanup EXIT HUP INT TERM
 mkdir -p "$SMOKE_HOME" "$SMOKE_CONFLICT_HOME/.config/dotfiles"
+mkdir -p "$SMOKE_LONG_TMP"
 
 sh -n "$SMOKE_ROOT/bin/dotfiles"
 find "$SMOKE_ROOT/scripts" -type f -name '*.sh' -exec sh -n {} \;
 
 "$SMOKE_ROOT/bin/dotfiles" install --dry-run --target "$SMOKE_HOME"
+if command -v tmux >/dev/null 2>&1; then
+    TMPDIR="$SMOKE_LONG_TMP" "$SMOKE_ROOT/bin/dotfiles" \
+        install --dry-run --backup-conflicts --target "$SMOKE_HOME"
+fi
 "$SMOKE_ROOT/bin/dotfiles" install --target "$SMOKE_HOME"
 "$SMOKE_ROOT/bin/dotfiles" install --target "$SMOKE_HOME"
 "$SMOKE_ROOT/bin/dotfiles" restow --target "$SMOKE_HOME"
