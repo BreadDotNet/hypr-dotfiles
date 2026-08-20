@@ -184,7 +184,9 @@ dependencies.
   безопасно отсутствует.
 - Неизвестный Linux получает common+linux, но не угаданный package manager.
 - Установка пакетов отделена от установки dotfiles; AUR helper, Homebrew
-  bootstrap, system settings и login shell не автоматизируются.
+  bootstrap, system settings и login shell не автоматизируются. Общий Neovim
+  стек теперь явно документирует `tree-sitter-cli` и `cc` как внешние
+  зависимости для `nvim-treesitter/main`, но их отсутствие не блокирует Stow.
 - Конфликтующий пользовательский файл блокирует установку. `stow --adopt` не
   используется; backup возможен только явно и восстановимо.
 - Светлый и тёмный Basic используют отдельные ANSI/semantic bases:
@@ -243,8 +245,9 @@ dependencies.
 - Проверить наличие/пути `~/.face`, `notion-calendar-electron`, Wofi fragment и
   polkit authentication agent.
 - На реальной macOS выполнить `doctor`, dry-run, install/restow/uninstall во
-  временном HOME и проверить BSD userland. Linux simulation не считается
-  фактической macOS-проверкой.
+  временном HOME, проверить BSD userland и подтвердить, что установленный
+  `tree-sitter-cli` удовлетворяет требованию `nvim-treesitter/main`. Linux
+  simulation не считается фактической macOS-проверкой.
 - Установить TPM/plugins только вручную, если они нужны.
 - При первом подключении или изменении Firefox extension вручную перезагрузить
   её; дальнейший light/dark выбор следует системному appearance.
@@ -276,7 +279,7 @@ dependencies.
 | Isolated tmux config check | успешно в отдельном tmux server/socket; 20 августа 2026 года дополнительно пройден Linux regression с длинным macOS-подобным `TMPDIR` и явным коротким `tmux -S` socket; реальная macOS остаётся непроверенной |
 | Basic Dark full config parse | успешно для Kitty и Hyprland в отдельных временных HOME; live reload не выполнялся |
 | Neovim/tmux bundles verify и recovery clone | успешно для всех четырёх bundles; восстановленные HEAD совпали |
-| Simulated macOS и unknown Linux platform fixtures | успешно: macOS выбрал common+macOS; unknown Linux common+linux и отказ от package manager |
+| Simulated macOS и unknown Linux platform fixtures | успешно: macOS выбрал common+macOS, `packages list` показывает `tree-sitter-cli`; unknown Linux common+linux и отказ от package manager |
 | Hyprland live config | после явного reload ошибок нет; runtime подтверждает `us,ru`, `grp:win_space_toggle`, DP-3 165 Hz в `0x0` и вертикальный DP-1 в `-1080x0` |
 | Переключение раскладки | успешно переключено English → Russian → English через Hyprland IPC |
 | `shellcheck` и `shfmt` | пропущены: инструменты отсутствуют |

@@ -106,18 +106,33 @@ hyprctl configerrors
 ## Быстрый старт: macOS
 
 Установите Xcode Command Line Tools, GNU Stow и, если хотите пользоваться
-`Brewfile`, Homebrew самостоятельно. Затем:
+`Brewfile`, Homebrew самостоятельно. Xcode CLT даёт `cc`; для закреплённой ветки
+`nvim-treesitter/main` нужен отдельный `tree-sitter` executable из
+`tree-sitter-cli` версии 0.26.1+.
+
+Если Homebrew уже установлен, клонируйте репозиторий и явно поставьте пакеты из
+`Brewfile`:
 
 ```sh
 git clone git@github.com:BreadDotNet/hypr-dotfiles.git ~/dotfiles
 cd ~/dotfiles
+./bin/dotfiles packages list
+./bin/dotfiles packages install
 ./bin/dotfiles doctor
 ./bin/dotfiles install --dry-run
 ./bin/dotfiles install
 ```
 
 `packages install` использует существующий Homebrew и `packages-list/Brewfile`.
-Установка Homebrew и применение `defaults` не входят в этот workflow.
+`doctor` отдельно показывает наличие `tree-sitter` и `cc`, но их отсутствие не
+мешает dry-run или установке Stow-пакетов. Установка Homebrew и применение
+`defaults` не входят в этот workflow.
+
+Если нужно быстро восстановить только отсутствующий CLI для Treesitter, можно
+явно выполнить `brew install tree-sitter-cli`, проверить `tree-sitter --version`
+и `cc --version`, затем в Neovim выполнить `:checkhealth nvim-treesitter` и
+`:TSInstall! bash c diff html lua luadoc markdown markdown_inline query vim
+vimdoc css`.
 
 ## Dry-run и отдельные пакеты
 

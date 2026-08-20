@@ -223,7 +223,7 @@ dotfiles_doctor() {
         printf 'Target conflicts: none found\n'
     fi
 
-    for dotfiles_doctor_tool in git zsh nvim tmux shellcheck shfmt; do
+    for dotfiles_doctor_tool in git zsh nvim tmux tree-sitter cc shellcheck shfmt; do
         if command -v "$dotfiles_doctor_tool" >/dev/null 2>&1; then
             printf 'Optional tool %-10s available\n' "$dotfiles_doctor_tool"
         else

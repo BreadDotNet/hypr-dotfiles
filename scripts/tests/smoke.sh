@@ -22,6 +22,10 @@ mkdir -p "$SMOKE_LONG_TMP"
 sh -n "$SMOKE_ROOT/bin/dotfiles"
 find "$SMOKE_ROOT/scripts" -type f -name '*.sh' -exec sh -n {} \;
 
+"$SMOKE_ROOT/bin/dotfiles" doctor --target "$SMOKE_HOME" > "$SMOKE_TMP/doctor.out" 2>&1
+grep -qF 'Optional tool tree-sitter' "$SMOKE_TMP/doctor.out"
+grep -qF 'Optional tool cc' "$SMOKE_TMP/doctor.out"
+
 "$SMOKE_ROOT/bin/dotfiles" install --dry-run --target "$SMOKE_HOME"
 if command -v tmux >/dev/null 2>&1; then
     TMPDIR="$SMOKE_LONG_TMP" "$SMOKE_ROOT/bin/dotfiles" \
@@ -151,7 +155,10 @@ SMOKE_RUNTIME_AFTER=$(readlink "$SMOKE_FIXTURE_HOME/.config/dotfiles/theme")
 
 printf '%s\n' 'ID=fixture' 'PRETTY_NAME="Fixture Linux"' > "$SMOKE_TMP/os-release"
 DOTFILES_UNAME_S=Darwin "$SMOKE_ROOT/bin/dotfiles" list >/dev/null
+DOTFILES_UNAME_S=Darwin "$SMOKE_ROOT/bin/dotfiles" packages list > "$SMOKE_TMP/macos-packages.out"
+grep -qF 'tree-sitter-cli' "$SMOKE_TMP/macos-packages.out"
 DOTFILES_UNAME_S=Darwin "$SMOKE_ROOT/bin/dotfiles" packages install --dry-run >/dev/null
+grep -qxF 'tree-sitter-cli' "$SMOKE_ROOT/packages-list/arch.txt"
 DOTFILES_UNAME_S=Linux DOTFILES_OS_RELEASE="$SMOKE_TMP/os-release" \
     "$SMOKE_ROOT/bin/dotfiles" list >/dev/null
 if DOTFILES_UNAME_S=Linux DOTFILES_OS_RELEASE="$SMOKE_TMP/os-release" \
