@@ -308,6 +308,20 @@ theme_generate_hyprland() {
 \$warning = rgb($theme_warning)
 \$warningAlpha = $theme_warning
 EOF
+    cat >"$theme_out/hyprland.lua" <<EOF
+-- Generated from themes/$theme_name.env. Do not edit.
+return {
+    bg = "rgb($theme_bg)",
+    surface = "rgb($theme_surface)",
+    overlay = "rgb($theme_overlay)",
+    fg = "rgb($theme_fg)",
+    muted = "rgb($theme_muted)",
+    accent = "rgb($theme_accent)",
+    error = "rgb($theme_error_color)",
+    ok = "rgb($theme_success)",
+    warning = "rgb($theme_warning)",
+}
+EOF
 }
 
 theme_generate_css() {
@@ -470,7 +484,7 @@ EOF
 
 theme_validate_output() {
     theme_output=$1
-    theme_expected='metadata.env kitty.conf ghostty.conf zsh-theme.zsh fzf.zsh tmux.conf hyprland.conf waybar.css wofi.css nvim.lua starship.toml'
+    theme_expected='metadata.env kitty.conf ghostty.conf zsh-theme.zsh fzf.zsh tmux.conf hyprland.conf hyprland.lua waybar.css wofi.css nvim.lua starship.toml'
     for theme_relative in $theme_expected; do
         if [ ! -s "$theme_output/$theme_relative" ]; then
             theme_error "generated output is missing $theme_relative"
@@ -484,6 +498,9 @@ theme_validate_output() {
     if command -v zsh >/dev/null 2>&1; then
         zsh -n "$theme_output/zsh-theme.zsh"
         zsh -n "$theme_output/fzf.zsh"
+    fi
+    if command -v luac >/dev/null 2>&1; then
+        luac -p "$theme_output/hyprland.lua"
     fi
     if command -v nvim >/dev/null 2>&1; then
         DOTFILES_THEME_NVIM_CHECK="$theme_output/nvim.lua" \

@@ -72,19 +72,24 @@ cd ~/dotfiles
 ./bin/dotfiles install
 ```
 
-Если установка заменила активный `hyprland.conf` в уже запущенной сессии,
-Hyprland может продолжить использовать старый inode до явного reload. Сначала
-проверьте новый конфиг, затем осознанно примените его:
+Основной конфиг рассчитан на Hyprland 0.55+ и использует Lua. Hyprland выбирает
+язык конфигурации только при запуске, поэтому после первой миграции с
+`hyprland.conf` нужно завершить и заново запустить графическую сессию. Сначала
+проверьте новый конфиг:
 
 ```sh
-Hyprland --verify-config --config "$HOME/.config/hypr/hyprland.conf"
-hyprctl reload
+Hyprland --verify-config --config "$HOME/.config/hypr/hyprland.lua"
 hyprctl configerrors
 ```
 
-Обычный `install` намеренно не перезагружает compositor. Явная команда
-переключения темы использует только `hyprctl reload config-only`, предварительно
-проверяет конфиг и сравнивает monitor/input state до и после reload.
+Переходный `hyprland.conf` сохранён только для уже запущенной до миграции
+Hyprlang-сессии. При следующем запуске наличие `hyprland.lua` заставляет
+Hyprland выбрать Lua; переходный файл можно удалить после проверки новой сессии.
+
+Обычный `install` намеренно не перезагружает compositor. После перехода на Lua
+явная команда переключения темы использует только
+`hyprctl reload config-only`, предварительно проверяет конфиг и сравнивает
+monitor/input state до и после reload.
 
 Обычный `install` не вызывает `pacman`, `sudo` или AUR helper. Сначала изучите
 списки:
@@ -268,9 +273,14 @@ common → linux → arch/macos → host → local
 хост через `--host NAME`. Не коммитьте реальные имена, если они раскрывают
 приватную информацию; можно использовать нейтральный псевдоним.
 
-Файл `monitors.conf` по определению зависит от оборудования. Пример находится в
+Файл `monitors.lua` по определению зависит от оборудования. Пример находится в
 `hosts/example/hypr/`; реальный локальный файл не должен перезаписываться общей
 установкой.
+
+Подключите локальный файл поздним fragment, например
+`~/.config/hypr/conf.d/90-host.lua -> ../monitors.lua`. Основной конфиг загружает
+`conf.d/*.lua` после common-настроек, поэтому machine overrides имеют ожидаемый
+приоритет.
 
 ## Локальные настройки и секреты
 
@@ -338,6 +348,24 @@ git clone .migration-backups/neovim/kickstart.nvim-6cd07b54e2b0aeaffd39c7d604f08
 
 ## tmux и TPM
 
+`tdev --wikkeo` создаёт сессии `intake`, `seller`, `client` с окнами
+`editor`, `shell`, `ai` в каждой и подключается к `intake`. Все окна открывают
+обычную оболочку в соответствующем каталоге: `~/projects/wikkeo/wikkeo-catalog-intake`,
+`~/projects/wikkeo/wikkeo-seller-app`, `~/projects/wikkeo/wikkeo_flutter`.
+Другой корень можно задать через `WIKKEO_PROJECTS_ROOT`. Повторный запуск сохраняет
+существующие сессии и процессы; из tmux переключает текущий клиент без вложенного
+запуска. Без флага `tdev` продолжает вызывать `~/zsh-scripts/tmux.sh`.
+Скрипт также доступен напрямую как `tmux-wikkeo` после установки пакета `shell`.
+
+`prefix+s` показывает сессии по индексу создания: при первом запуске Wikkeo
+порядок будет `intake`, `seller`, `client`. Уже существующие или пересозданные
+сессии сохраняют фактический порядок индексов. Новая привязка применяется при
+следующей загрузке tmux-конфига.
+
+После добавления скрипта выполните `./bin/dotfiles install --package shell`
+и откройте новую оболочку. Изолированная проверка запуска:
+`sh scripts/tests/tmux-wikkeo.sh`.
+
 Сторонние исходники tmux-плагинов больше не должны быть частью основного Git.
 Основной конфиг условно загружает тему, local fragment и TPM, поэтому tmux
 работает и без них.
@@ -358,14 +386,14 @@ checkout и bundles сохранены локально в `.migration-backups/t
 - Обычная установка не меняет system settings, login shell, Homebrew или AUR.
   Однако явная команда `theme apply/toggle` по выбранному workflow меняет
   системный light/dark appearance; `--no-reload` отключает этот эффект.
-- `~/.face`, hardware-specific `monitors.conf`, команда
+- `~/.face`, hardware-specific `monitors.lua`, команда
   `notion-calendar-electron`, Wofi theme fragment и polkit agent должны быть
   проверены владельцем машины; CLI не создаёт их из предположений.
 - Firefox extension реагирует на системный appearance после загрузки extension;
   первое подключение или обновление её файлов может требовать ручной reload.
 - Neovim plugins и tmux plugins не загружаются во время безопасных проверок.
-- Локальный `monitors.conf` на машине миграции сохранён обычным файлом и
-  подключён через неотслеживаемый `conf.d/90-host.conf`; на других машинах этот
+- Локальный `monitors.lua` на машине миграции сохранён обычным файлом и
+  подключён через неотслеживаемый `conf.d/90-host.lua`; на других машинах этот
   fragment нужно создать самостоятельно.
 
 ## Проверки

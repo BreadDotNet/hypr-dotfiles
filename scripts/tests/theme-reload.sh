@@ -16,7 +16,7 @@ test_cleanup() {
 trap test_cleanup EXIT HUP INT TERM
 mkdir -p "$TEST_BIN" "$TEST_HOME/.config/hypr" "$TEST_STATE"
 : > "$TEST_LOG"
-printf '%s\n' '# isolated Hyprland fixture' > "$TEST_HOME/.config/hypr/hyprland.conf"
+printf '%s\n' '-- isolated Hyprland fixture' > "$TEST_HOME/.config/hypr/hyprland.lua"
 
 make_fixture_command() {
     fixture_name=$1

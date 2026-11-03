@@ -93,6 +93,14 @@ grep -qF 'bg = "#1E1E1E"' "$SMOKE_THEME_RUNTIME/starship.toml"
 grep -qF '@define-color bg #1E1E1E;' "$SMOKE_THEME_RUNTIME/waybar.css"
 grep -qF '@define-color bg #1E1E1E;' "$SMOKE_THEME_RUNTIME/wofi.css"
 grep -qF '$bg = rgb(1E1E1E)' "$SMOKE_THEME_RUNTIME/hyprland.conf"
+grep -qF 'bg = "rgb(1E1E1E)"' "$SMOKE_THEME_RUNTIME/hyprland.lua"
+if command -v Hyprland >/dev/null 2>&1; then
+    env \
+        HOME="$SMOKE_HOME" \
+        XDG_CONFIG_HOME="$SMOKE_HOME/.config" \
+        Hyprland --verify-config \
+        --config "$SMOKE_HOME/.config/hypr/hyprland.lua" >/dev/null
+fi
 grep -qF 'frame: "#1E1E1E"' \
     "$SMOKE_ROOT/themes/generated/firefox-terminal-macos/themes.js"
 SMOKE_DARK_TARGET=$(readlink "$SMOKE_HOME/.config/dotfiles/theme")

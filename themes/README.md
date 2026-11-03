@@ -41,7 +41,7 @@ metadata and `theme current` use the canonical name.
 
 Apply/toggle validates and stages the whole candidate before atomically replacing
 the runtime link. With live reload enabled it synchronizes system appearance and
-reloads supported running applications. A generation or Hyprland preflight
+reloads supported running applications. A generation or Hyprland Lua preflight
 failure preserves the previous selection; later integration failures are
 reported with a nonzero status while the validated new selection remains active.
 

@@ -57,3 +57,6 @@ fi
 # if command -v starship >/dev/null 2>&1; then
 #   eval "$(starship init zsh)"
 # fi
+
+# Added by codebase-memory-mcp install
+export PATH="/home/breadnet/.local/bin:$PATH"

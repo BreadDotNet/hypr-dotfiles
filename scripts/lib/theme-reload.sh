@@ -22,7 +22,7 @@ theme_reload_preflight() {
         theme_error 'Hyprland is running, but the Hyprland verifier is unavailable'
         return 1
     }
-    theme_hypr_config=${DOTFILES_TARGET:-${HOME:?HOME is not set}}/.config/hypr/hyprland.conf
+    theme_hypr_config=${DOTFILES_TARGET:-${HOME:?HOME is not set}}/.config/hypr/hyprland.lua
     [ -r "$theme_hypr_config" ] || {
         theme_error "Hyprland is running, but its config is unavailable: $theme_hypr_config"
         return 1

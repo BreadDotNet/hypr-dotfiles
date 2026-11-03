@@ -45,7 +45,7 @@ symlink на `packages/` или `archive/legacy/`. Они использовал
 - `tmux/.tmux.conf` ссылался на checkout-specific `~/dotfiles/tmux/...` и
   безусловно ожидал TPM.
 - Polybar содержал broken symlink launcher.
-- Hyprland ожидает локальный `~/.config/hypr/monitors.conf`, которого нет в Git;
+- Hyprland ожидал локальный `~/.config/hypr/monitors.conf`, которого нет в Git;
   это корректно считать hardware-specific файлом, но прежняя документация не
   объясняла его жизненный цикл.
 - Конфиги ссылаются на внешние/локальные объекты, которые репозиторий не должен
@@ -97,8 +97,9 @@ manifests. Broken Polybar symlink заменён текстовым файлом
   не запускается основной конфигурацией; выделяется в optional пакет.
 - Неиспользуемые wallpapers: отсутствие ссылки из Hyprpaper не доказывает, что
   пользователь не выбирает их вручную, поэтому изображения сохранены.
-- Monitor template: остаётся примером host-specific настройки, а не общим
-  автоматически устанавливаемым `monitors.conf`.
+- Monitor template до Lua-миграции использовал `monitors.conf`; он остаётся
+  примером host-specific настройки, а не общим автоматически устанавливаемым
+  файлом.
 - Локальный `~/.face`, `notion-calendar-electron`, Wofi theme fragment и путь
   polkit agent требуют ручного подтверждения; они не добавляются автоматически.
 
@@ -149,11 +150,11 @@ dependencies.
 
 - Активные пакеты обязаны иметь уникальные конечные пути. В частности, Hypridle
   не должен одновременно принадлежать `hyprland` и отдельному `hypridle`.
-- Platform/host layers не создают второй `.zshrc` или `hyprland.conf`; основной
+- Platform/host layers не создают второй `.zshrc` или `hyprland.lua`; основной
   файл условно загружает отдельные fragments.
 - Старые Waybar/Kitty/Wofi fragments и compatibility symlink в archive нельзя
   включать в устанавливаемые пакеты.
-- Реальный `monitors.conf`, обычный Ghostty config и любые файлы, не являющиеся
+- Реальный `monitors.lua`, обычный Ghostty config и любые файлы, не являющиеся
   ссылками этого репозитория, нельзя заменять автоматически.
 - GNU Stow directory folding затрудняет точный контроль отдельных ссылок; CLI
   использует no-folding и проверяет conflicts до изменения `$HOME`.
@@ -201,6 +202,9 @@ dependencies.
   `terminal-pro` сохранён как alias.
 - Явный `theme apply/toggle` синхронизирует system appearance и поддерживаемые
   live-приложения; install/restow и `--no-reload` этого не делают.
+- Начиная с Hyprland 0.55 основной конфиг использует Lua; Hyprlang-файл оставлен
+  только как переходный fallback для сессии, запущенной до миграции. Hyprlock
+  продолжает получать отдельный generated `hyprland.conf`.
 - Tmux plugins не vendor'ятся и не скачиваются автоматически.
 - Neovim получает offline mode для headless-проверки без clone/update plugins.
 
@@ -237,11 +241,17 @@ dependencies.
   input/monitor settings. Это не выполняется обычным install автоматически.
 - Старый `CLAUDE.md` заменён указателем на `AGENTS.md`; факты прежней структуры
   отражены здесь.
+- 12 сентября 2026 года основной Hyprland config перенесён в `hyprland.lua`, а
+  monitor/workspace overrides — в `conf.d/*.lua`. Локальный `monitors.conf`
+  сохранён в backup и преобразован в неотслеживаемый `monitors.lua`; runtime
+  theme дополнен отдельным Lua-модулем цветов.
 
 ## Оставшиеся ручные действия
 
-- На новых хостах создать при необходимости локальный `monitors.conf` и fragment,
+- На новых хостах создать при необходимости локальный `monitors.lua` и fragment,
   который его подключает; не коммитить аппаратно-зависимое значение как common.
+- После первого запуска Lua-конфига проверить runtime state и удалить
+  переходный `hyprland.conf` вместе со старым `conf.d/90-host.conf`.
 - Проверить наличие/пути `~/.face`, `notion-calendar-electron`, Wofi fragment и
   polkit authentication agent.
 - На реальной macOS выполнить `doctor`, dry-run, install/restow/uninstall во
@@ -281,6 +291,35 @@ dependencies.
 | Neovim/tmux bundles verify и recovery clone | успешно для всех четырёх bundles; восстановленные HEAD совпали |
 | Simulated macOS и unknown Linux platform fixtures | успешно: macOS выбрал common+macOS, `packages list` показывает `tree-sitter-cli`; unknown Linux common+linux и отказ от package manager |
 | Hyprland live config | после явного reload ошибок нет; runtime подтверждает `us,ru`, `grp:win_space_toggle`, DP-3 165 Hz в `0x0` и вертикальный DP-1 в `-1080x0` |
+| Hyprland Lua migration | 12 сентября 2026: обе темы и локальный `monitors.lua` проходят `Hyprland --verify-config` на 0.56.1; реальный Lua startup ожидает перезапуска пользовательской сессии |
 | Переключение раскладки | успешно переключено English → Russian → English через Hyprland IPC |
 | `shellcheck` и `shfmt` | пропущены: инструменты отсутствуют |
 | Реальная macOS | не выполнялась; требуется macOS-хост |
+
+### Проверка `tdev --wikkeo`, 2 октября 2026
+
+- Добавлен POSIX launcher в Stow-пакет `shell`; обычный `tdev` сохраняет прежний
+  внешний скрипт. Сессии `intake`, `seller`, `client` открывают оболочки в
+  каталогах проектов, окна называются `editor`, `shell`, `ai`.
+- `sh scripts/tests/tmux-wikkeo.sh` проходит на Linux/tmux 3.7c в отдельном
+  server/socket с временными HOME/XDG: порядок создания, индексы/имена окон,
+  каталоги с пробелами, отключение переименования, повторный вызов с сохранением
+  pane PID и пользовательских окон, legacy dispatch, ошибки аргументов,
+  отсутствующего каталога и tmux. Attach/switch перехватываются fixture;
+  интерактивное подключение к пользовательскому терминалу не выполнялось.
+- `doctor`, install/theme-toggle dry-run, `sh -n`, `zsh -n`, `git diff --check`,
+  `scripts/tests/smoke.sh` и `scripts/tests/theme-reload.sh` проходят.
+  Smoke включает install дважды/restow/uninstall, offline Neovim, детерминизм
+  темы, rollback, отсутствие archive/broken links и симуляцию Darwin/unknown
+  Linux. Повтор вне песочницы подтвердил tmux runtime validation.
+- Отдельный временный HOME проверяет конфликт обычного файла нового launcher:
+  без opt-in он сохранён; `--backup-conflicts` сохраняет его содержимое в backup;
+  uninstall удаляет управляемую ссылку и сохраняет backup.
+- Doctor подтверждает отсутствие дублирующихся selected targets. Проверены
+  отсутствие nested Git/gitlinks и broken links в доступном дереве (ignored
+  migration backups исключены); новые скрипты проверены на вероятные секреты.
+- `shellcheck`/`shfmt` отсутствуют, не устанавливались. Реальная macOS и
+  интерактивное меню сессий не проверялись; проверена конфигурация сортировки по
+  индексу. Ранее созданные/пересозданные сессии могут иметь другой порядок.
+- Ранее существовавшие пользовательские изменения сохранены. Live install,
+  desktop reload, изменения remotes/history и установка пакетов не выполнялись.

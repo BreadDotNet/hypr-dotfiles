@@ -1,0 +1,47 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$#" -ne 0 ]; then
+    printf '%s\n' 'usage: tdev --wikkeo (or tmux-wikkeo)' >&2
+    exit 2
+fi
+if ! command -v tmux >/dev/null 2>&1; then
+    printf '%s\n' 'tmux-wikkeo: tmux is not installed' >&2
+    exit 127
+fi
+
+projects_root=${WIKKEO_PROJECTS_ROOT:-"$HOME/projects/wikkeo"}
+for project in wikkeo-catalog-intake wikkeo-seller-app wikkeo_flutter; do
+    if [ ! -d "$projects_root/$project" ]; then
+        printf 'tmux-wikkeo: missing project directory: %s\n' "$projects_root/$project" >&2
+        exit 1
+    fi
+done
+
+create_project_session() {
+    session=$1
+    directory=$2
+    if tmux has-session -t "=$session" 2>/dev/null; then
+        return
+    fi
+    editor=$(tmux new-session -d -s "$session" -n editor -c "$directory" -P -F '#{window_id}')
+    tmux set-option -w -t "$editor" automatic-rename off
+    tmux set-option -w -t "$editor" allow-rename off
+    for name in shell ai; do
+        window=$(tmux new-window -d -t "$session:" -n "$name" -c "$directory" -P -F '#{window_id}')
+        tmux set-option -w -t "$window" automatic-rename off
+        tmux set-option -w -t "$window" allow-rename off
+    done
+    tmux select-window -t "$editor"
+}
+
+create_project_session intake "$projects_root/wikkeo-catalog-intake"
+create_project_session seller "$projects_root/wikkeo-seller-app"
+create_project_session client "$projects_root/wikkeo_flutter"
+
+if [ -n "${TMUX-}" ]; then
+    exec tmux switch-client -t '=intake'
+else
+    exec tmux attach-session -t '=intake'
+fi

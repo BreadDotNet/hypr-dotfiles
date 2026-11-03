@@ -1,7 +1,12 @@
 # Common aliases and user-space tool locations.
 alias lg='lazygit'
 function tdev() {
-  "$HOME/zsh-scripts/tmux.sh" "$@"
+  if [[ "${1-}" == --wikkeo ]]; then
+    shift
+    "$HOME/.local/bin/tmux-wikkeo" "$@"
+  else
+    "$HOME/zsh-scripts/tmux.sh" "$@"
+  fi
 }
 
 function dotfiles_theme_refresh() {
