@@ -1,0 +1,27 @@
+#!/bin/sh
+set -eu
+# Native discovery fallback for an installed plugin whose skills are not loaded.
+[ "$#" -eq 1 ] || { printf '%s\n' 'Usage: codex-superpowers-link /absolute/path/to/superpowers' >&2; exit 2; }
+source_root=$(CDPATH= cd -P "$1" && pwd)
+[ -d "$source_root/skills" ] || { printf '%s\n' 'Missing skills directory' >&2; exit 1; }
+target_root=${HOME:?HOME is not set}/.agents/skills
+found=0
+# Check every destination before creating any links. Never overwrite user files.
+for skill in "$source_root"/skills/*; do
+    [ -f "$skill/SKILL.md" ] || continue
+    found=1
+    destination="$target_root/superpowers-$(basename "$skill")"
+    if [ -e "$destination" ] || [ -L "$destination" ]; then
+        [ -L "$destination" ] && [ "$(readlink "$destination")" = "$skill" ] || {
+            printf 'Conflict, nothing overwritten: %s\n' "$destination" >&2; exit 1;
+        }
+    fi
+done
+[ "$found" -eq 1 ] || { printf '%s\n' 'No skills found' >&2; exit 1; }
+mkdir -p "$target_root"
+for skill in "$source_root"/skills/*; do
+    [ -f "$skill/SKILL.md" ] || continue
+    destination="$target_root/superpowers-$(basename "$skill")"
+    [ -L "$destination" ] || ln -s "$skill" "$destination"
+done
+printf '%s\n' 'Native skills linked. Disable the plugin skill source to avoid duplicates; restart Codex and verify /skills.'

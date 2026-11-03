@@ -415,3 +415,18 @@ find scripts -type f -name '*.sh' -exec sh -n {} \;
 uninstall), отсутствие nested Git/gitlinks/broken links, конфликтующие targets,
 детерминированность theme generation и offline Neovim headless. Полный журнал и
 пропущенные из-за отсутствующих инструментов проверки находятся в `AUDIT.md`.
+
+## Codex: общий инженерный процесс
+
+Пакет `codex` включён в common manifest: личные инструкции, навык
+`engineering-workflow`, роли исполнителей и независимого ревьюера. Настройки
+авторизации, история, доверенные проекты и локальный `config.toml` не стовятся.
+Установка: `./bin/dotfiles install --package codex --dry-run`, затем install;
+для существующего AGENTS.md нужен явный `--backup-conflicts`.
+
+Начинайте существенную задачу из корня проекта командой `codex`, затем `/plan`.
+После обсуждения выйдите из Plan Mode и напишите «Реализуй согласованный план».
+Для явного выбора навыка: `$engineering-workflow` или `/skills`.
+Полная [инструкция запуска, новых проектов, Superpowers и Figma](packages/codex/.config/dotfiles/codex/WORKFLOW.md).
+Маленькие очевидные исправления не требуют полного цикла; автоматических
+коммитов, worktree, push и PR нет. Проверка пакета: `sh scripts/tests/codex-workflow.sh`.

@@ -323,3 +323,47 @@ dependencies.
   индексу. Ранее созданные/пересозданные сессии могут иметь другой порядок.
 - Ранее существовавшие пользовательские изменения сохранены. Live install,
   desktop reload, изменения remotes/history и установка пакетов не выполнялись.
+
+### Codex workflow, 3 ноября 2026
+
+- Добавлен common Stow-пакет codex: глобальный AGENTS, engineering-workflow,
+  роли worker/integrator/reviewer, руководство запуска/нового проекта/Figma и
+  безопасный native-discovery helper. Config/auth/history/cache не стовятся.
+- Skill quick_validate, TOML parse обязательных полей ролей, shell syntax и
+  git diff --check прошли. Независимое ревью главной сессией skill/roles и
+  проектных изменений Flutter/Seller не нашло существенных замечаний.
+- Isolated codex-workflow fixture прошёл: install дважды/restow/uninstall,
+  обычный конфликт без потери файла и backup opt-in, native skills повторно,
+  upstream path с пробелами и конфликт без перезаписи.
+- doctor, полный install dry-run, theme toggle dry-run, sh -n, smoke и
+  theme-reload fixtures прошли. Smoke покрывает theme determinism/rollback,
+  Darwin/unknown Linux selection, isolated install lifecycle и offline Neovim.
+  tmux fixture сначала блокировался sandbox EPERM сокета; повтор вне sandbox
+  прошёл. Реальный desktop reload и системный appearance не менялись.
+- Нет nested .git в packages/scripts, gitlinks и broken links нового пакета;
+  новый код проверен на секреты. Runtime Figma checkout находится вне репозитория.
+  shellcheck/shfmt отсутствуют и не устанавливались; реальная macOS не проверена.
+- Live установлен только пакет codex. Предыдущий глобальный AGENTS сохранён в
+  ~/.local/state/dotfiles/backups/20261103-140316-161306. Локальный config сохранён
+  в ~/.local/state/dotfiles/codex-backups/20261103-140342; сохранены текущая модель,
+  trusted paths, MCP codebase-memory и прочие настройки; plan effort ultra
+  соответствует каталогу активной gpt-6.1-sol.
+- Superpowers 5.1.3 (cache d6169bef) показывался установленным, но свежий prompt
+  не содержал навыков. Подключены native ссылки к этому фиксированному cache,
+  старый plugin-источник отключён, чтобы избежать двойной загрузки. Свежий
+  codex debug prompt-input теперь содержит engineering-workflow, brainstorming,
+  writing-plans и subagent-driven-development. Это проверка обнаружения, а не
+  доказательство автоматического поведения модели или исполнения каждой роли.
+- Инструкции Flutter, Seller и Intake согласованы отдельными docs-задачами
+  240, 008 и 004; история/форматы и текущая перестройка Intake сохранены.
+  Diff-check прошёл во всех трёх; приложения и live API не запускались.
+- Локальный TalkToFigma pilot подготовлен вне dotfiles на фиксированном commit
+  ddd90f3a6d454ea0b2fc29f1b084f50fd062b880. Frozen lock install и stdio
+  initialize/tools-list (44 инструмента) прошли. Relay ограничен loopback;
+  read/export/join allowlist задан в отключённом по умолчанию MCP. Ни setup
+  Cursor, ни автоматический сервис не запускались. Требуется ручной Community
+  plugin в авторизованном браузере: frame/styles/export/disconnect не проверены.
+- Модельные сценарии полного нового workflow и фактический выбор лёгкой модели
+  не запускались: не выдаём metadata/проверку файлов за поведенческий тест.
+  Первые три реальные задачи ещё предстоят; критерии наблюдений есть в руководстве.
+- Коммиты, remotes, история Git, публикация и push не менялись.

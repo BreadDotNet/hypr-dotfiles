@@ -6,3 +6,4 @@ tmux
 kitty
 yazi
 gitu
+codex
